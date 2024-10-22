@@ -7,6 +7,9 @@ import 'package:your_recipe/core/colors.dart';
 import 'package:your_recipe/features/auth/presentation/bloc/register/register_bloc.dart';
 import 'package:your_recipe/router/app_router.dart';
 
+import '../../../../core/l10n/messages_en.dart';
+import '../../../../core/l10n/messages_ru.dart';
+
 @RoutePage()
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -16,6 +19,9 @@ class RegisterScreen extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController confirmPasswordController = TextEditingController();
+
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
 
     return Scaffold(
       backgroundColor: AppColors.orange,
@@ -46,7 +52,7 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      "One step, one way",
+                      isRussian ? messagesRu['one_step_one_way'] ?? '' : messagesEn['one_step_one_way'] ?? '',
                       style: TextStyle(
                         color: AppColors.white,
                         fontSize: 16.sp,
@@ -58,7 +64,7 @@ class RegisterScreen extends StatelessWidget {
               ],
             ),
             Text(
-              "Email",
+              isRussian ? messagesRu['email'] ?? '' : messagesEn['email'] ?? '',
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 16.sp,
@@ -72,7 +78,7 @@ class RegisterScreen extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.white,
-                hintText: "Enter your email",
+                hintText: isRussian ? messagesRu['enter_email_hint'] ?? '' : messagesEn['enter_email_hint'] ?? '',
                 hintStyle: const TextStyle(color: AppColors.darkGrey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -82,7 +88,7 @@ class RegisterScreen extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Text(
-              "Password",
+              isRussian ? messagesRu['password'] ?? '' : messagesEn['password'] ?? '',
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 16.sp,
@@ -97,7 +103,7 @@ class RegisterScreen extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.white,
-                hintText: "Enter your password",
+                hintText: isRussian ? messagesRu['password_hint'] ?? '' : messagesEn['password_hint'] ?? '',
                 hintStyle: const TextStyle(color: AppColors.darkGrey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -107,7 +113,7 @@ class RegisterScreen extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Text(
-              "Password confirm",
+              isRussian ? messagesRu['password_confirm'] ?? '' : messagesEn['email'] ?? '',
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 16.sp,
@@ -122,7 +128,7 @@ class RegisterScreen extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.white,
-                hintText: "Enter your password",
+                hintText: isRussian ? messagesRu['password_hint'] ?? '' : messagesEn['password_hint'] ?? '',
                 hintStyle: const TextStyle(color: AppColors.darkGrey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -148,7 +154,7 @@ class RegisterScreen extends StatelessWidget {
                   context.read<RegisterBloc>().add(RegisterRequested(email, password, confirmPassword));
                 },
                 child: Text(
-                  "Register",
+                  isRussian ? messagesRu['register'] ?? '' : messagesEn['register'] ?? '',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16.sp,
@@ -160,7 +166,7 @@ class RegisterScreen extends StatelessWidget {
             SizedBox(height: 15.h),
             Center(
               child: Text(
-                "or",
+                isRussian ? messagesRu['or'] ?? '' : messagesEn['or'] ?? '',
                 style: TextStyle(
                   color: AppColors.black,
                   fontSize: 14.sp,
@@ -174,7 +180,7 @@ class RegisterScreen extends StatelessWidget {
               child: ElevatedButton.icon(
                 icon: Image.asset('assets/images/google.png', height: 24.h),
                 label: Text(
-                  "Continue with Google",
+                  isRussian ? messagesRu['continue_with_google'] ?? '' : messagesEn['continue_with_google'] ?? '',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16.sp,

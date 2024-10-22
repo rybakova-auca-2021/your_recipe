@@ -5,6 +5,8 @@ import 'package:your_recipe/router/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/l10n/messages_en.dart';
+import '../../../../core/l10n/messages_ru.dart';
 import '../bloc/login/login_bloc.dart';
 
 @RoutePage()
@@ -15,6 +17,9 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
 
     return Scaffold(
       backgroundColor: AppColors.orange,
@@ -45,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      "Happy to see you\nagain. Let’s create\nyour food together",
+                      isRussian ? messagesRu['welcome_message'] ?? '' : messagesEn['welcome_message'] ?? '',
                       style: TextStyle(
                         color: AppColors.white,
                         fontSize: 16.sp,
@@ -58,7 +63,7 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Text(
-              "Email",
+              isRussian ? messagesRu['email_label'] ?? '' : messagesEn['email_label'] ?? '',
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 16.sp,
@@ -72,7 +77,7 @@ class LoginScreen extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.white,
-                hintText: "Enter your email",
+                hintText: isRussian ? messagesRu['email_hint'] ?? '' : messagesEn['email_hint'] ?? '',
                 hintStyle: const TextStyle(color: AppColors.darkGrey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -82,7 +87,7 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Text(
-              "Password",
+              isRussian ? messagesRu['password_label'] ?? '' : messagesEn['password_label'] ?? '',
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 16.sp,
@@ -97,7 +102,7 @@ class LoginScreen extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.white,
-                hintText: "Enter your password",
+                hintText: isRussian ? messagesRu['password_hint'] ?? '' : messagesEn['password_hint'] ?? '',
                 hintStyle: const TextStyle(color: AppColors.darkGrey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -112,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                   AutoRouter.of(context).push(const ForgotPasswordRoute());
                 },
                 child: Text(
-                  "Forgot Password?",
+                  isRussian ? messagesRu['forgot_password'] ?? '' : messagesEn['forgot_password'] ?? '',
                   style: TextStyle(
                     color: AppColors.white,
                     fontSize: 14.sp,
@@ -137,7 +142,7 @@ class LoginScreen extends StatelessWidget {
                   context.read<LoginBloc>().add(LoginRequested(email, password));
                 },
                 child: Text(
-                  "Login",
+                  isRussian ? messagesRu['login_button'] ?? '' : messagesEn['login_button'] ?? '',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16.sp,
@@ -149,7 +154,7 @@ class LoginScreen extends StatelessWidget {
             SizedBox(height: 15.h),
             Center(
               child: Text(
-                "or",
+                isRussian ? messagesRu['or'] ?? '' : messagesEn['or'] ?? '',
                 style: TextStyle(
                   color: AppColors.black,
                   fontSize: 14.sp,
@@ -163,7 +168,7 @@ class LoginScreen extends StatelessWidget {
               child: ElevatedButton.icon(
                 icon: Image.asset('assets/images/google.png', height: 24.h),
                 label: Text(
-                  "Continue with Google",
+                  isRussian ? messagesRu['continue_with_google'] ?? '' : messagesEn['continue_with_google'] ?? '',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16.sp,

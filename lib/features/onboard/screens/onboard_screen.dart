@@ -5,6 +5,8 @@ import 'package:your_recipe/features/onboard/widgets/onboarding_item.dart';
 import 'package:your_recipe/router/app_router.dart';
 import 'package:your_recipe/core/colors.dart';
 
+import '../../../core/l10n/messages_en.dart';
+import '../../../core/l10n/messages_ru.dart';
 import '../data/onboard_data.dart';
 
 @RoutePage()
@@ -19,8 +21,14 @@ class _OnboardScreenState extends State<OnboardScreen> {
   final PageController _controller = PageController();
   int introIndex = 0;
 
+
   @override
   Widget build(BuildContext context) {
+    List<OnboardingData> onboardData = getOnboardingData(context);
+
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Padding(
@@ -69,7 +77,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                           }
                         },
                         child: Text(
-                          'Continue',
+                          isRussian ? messagesRu['continue'] ?? '' : messagesEn['continue'] ?? '',
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w500,

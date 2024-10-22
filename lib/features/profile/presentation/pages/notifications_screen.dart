@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:your_recipe/core/colors.dart';
 
+import '../../../../core/l10n/messages_en.dart';
+import '../../../../core/l10n/messages_ru.dart';
+
 @RoutePage()
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -18,6 +21,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -33,8 +40,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           },
         ),
         title: Text(
-          "Notifications",
-          style: TextStyle(
+          isRussian ? messagesRu['notifications'] ?? '' : messagesEn['notifications'] ?? '',          style: TextStyle(
             color: AppColors.black,
             fontSize: 20.sp,
             fontWeight: FontWeight.w400,
@@ -48,8 +54,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           children: [
             SwitchListTile(
               title: Text(
-                "Receive App News",
-                style: TextStyle(
+                isRussian ? messagesRu['receive_app_news'] ?? '' : messagesEn['receive_app_news'] ?? '',                style: TextStyle(
                   color: AppColors.black,
                   fontWeight: FontWeight.w500,
                   fontSize: 16.sp
@@ -66,8 +71,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             SizedBox(height: 16.h),
             SwitchListTile(
               title: Text(
-                  "New recipes",
-                  style: TextStyle(
+                  isRussian ? messagesRu['new_recipes'] ?? '' : messagesEn['new_recipes'] ?? '',                  style: TextStyle(
                       color: AppColors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp
@@ -84,8 +88,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             SizedBox(height: 16.h),
             SwitchListTile(
               title: Text(
-                  "Meal planning reminders",
-                  style: TextStyle(
+                  isRussian ? messagesRu['meal_planning_reminders'] ?? '' : messagesEn['meal_planning_reminders'] ?? '',                  style: TextStyle(
                       color: AppColors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp
@@ -117,7 +120,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   ),
                 ),
                 child: Text(
-                  'Save',
+                  isRussian ? messagesRu['save'] ?? '' : messagesEn['save'] ?? '',
                   style: TextStyle(
                     fontSize: 18.sp,
                     color: Colors.white,

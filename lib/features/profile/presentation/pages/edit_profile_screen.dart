@@ -12,6 +12,9 @@ import 'package:your_recipe/features/profile/domain/usecases/fetch_profile_useca
 import 'package:your_recipe/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:your_recipe/features/profile/presentation/bloc/profile_update/profile_bloc.dart';
 
+import '../../../../core/l10n/messages_en.dart';
+import '../../../../core/l10n/messages_ru.dart';
+
 @RoutePage()
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -91,6 +94,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -167,7 +174,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(
-                          labelText: 'Your Email',
+                          labelText: isRussian ? messagesRu['your_email'] ?? '' : messagesEn['your_email'] ?? '',
                           prefixIcon: Icon(Icons.email_outlined),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
@@ -178,7 +185,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       TextFormField(
                         controller: usernameController,
                         decoration: InputDecoration(
-                          labelText: 'Your Username',
+                          labelText: isRussian ? messagesRu['your_username'] ?? '' : messagesEn['your_username'] ?? '',
                           prefixIcon: Icon(Icons.person_outline),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
@@ -207,8 +214,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                           child: Text(
-                            'Edit',
-                            style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                            isRussian ? messagesRu['edit'] ?? '' : messagesEn['edit'] ?? '',                            style: TextStyle(fontSize: 18.sp, color: Colors.white),
                           ),
                         ),
                       ),

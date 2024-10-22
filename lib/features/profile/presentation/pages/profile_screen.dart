@@ -6,6 +6,9 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:your_recipe/features/profile/presentation/widgets/profile_option_row.dart';
 
+import '../../../../core/l10n/language_cubit.dart';
+import '../../../../core/l10n/messages_en.dart';
+import '../../../../core/l10n/messages_ru.dart';
 import '../../../../router/app_router.dart';
 import '../bloc/profile_update/profile_bloc.dart';
 import '../widgets/language_dropdown.dart';
@@ -21,11 +24,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
+
     return FutureBuilder<int?>(
       future: _getUserId(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator(color: Colors.orange,));
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
@@ -62,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
               child: BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(color: Colors.orange,));
                   } else if (state is ProfileFetchSuccess) {
                     final profile = state.profile;
                     return Column(
@@ -82,27 +88,31 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 24.h),
                         ProfileDetailField(
-                          label: 'Your Email',
+                          label: isRussian ? messagesRu['your_email'] ?? '' : messagesEn['your_email'] ?? '',
                           icon: Icons.email_outlined,
                           value: profile.email!,
                         ),
                         SizedBox(height: 16.h),
                         ProfileDropdownField(
-                          label: 'Language',
-                          value: "English",
+                          label: isRussian ? messagesRu['language'] ?? '' : messagesEn['language'] ?? '',
+                          value: isRussian ? 'Russian' : 'English', // Change value based on locale
                           onChanged: (newValue) {
-                            // todo: handle language change
+                            if (newValue == 'English') {
+                              context.read<LanguageCubit>().changeLanguage('en');
+                            } else if (newValue == 'Russian') {
+                              context.read<LanguageCubit>().changeLanguage('ru');
+                            }
                           },
                         ),
                         SizedBox(height: 16.h),
                         ProfileOptionRow(
-                            label: "Meal plan",
+                            label: isRussian ? messagesRu['meal_plan'] ?? '' : messagesEn['meal_plan'] ?? '',
                             onTap: () {
                               AutoRouter.of(context).push(const MealPlannerRoute());
                             }
                         ),
                         ProfileOptionRow(
-                            label: "Saved recipes",
+                            label: isRussian ? messagesRu['saved_recipes'] ?? '' : messagesEn['saved_recipes'] ?? '',
                             onTap: () {
                               AutoRouter.of(context).push(const FavoritesRoute());
                             }
@@ -122,4 +132,3 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
-

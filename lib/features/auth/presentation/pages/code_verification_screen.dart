@@ -8,6 +8,9 @@ import 'package:your_recipe/features/auth/presentation/bloc/code_verification/co
 import 'package:your_recipe/router/app_router.dart';
 import 'package:your_recipe/core/colors.dart';
 
+import '../../../../core/l10n/messages_en.dart';
+import '../../../../core/l10n/messages_ru.dart';
+
 @RoutePage()
 class CodeVerificationScreen extends StatelessWidget {
   const CodeVerificationScreen({super.key, required this.userId});
@@ -16,6 +19,10 @@ class CodeVerificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var code;
+
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
+
 
     return Scaffold(
       backgroundColor: AppColors.orange,
@@ -53,7 +60,7 @@ class CodeVerificationScreen extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      "Enter the verification\ncode that was sent to\nrybakova_k@auca.kg",
+                      isRussian ? messagesRu['verification_instruction'] ?? '' : messagesEn['verification_instruction'] ?? '',
                       style: TextStyle(
                         color: AppColors.white,
                         fontSize: 16.sp,
@@ -104,7 +111,7 @@ class CodeVerificationScreen extends StatelessWidget {
                   context.read<CodeVerificationBloc>().add(CodeVerificationRequested(code, userId));
                 },
                 child: Text(
-                  "Reset password",
+                  isRussian ? messagesRu['reset_password'] ?? '' : messagesEn['reset_password'] ?? '',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16.sp,

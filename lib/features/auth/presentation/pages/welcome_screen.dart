@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:your_recipe/core/colors.dart';
 
+import '../../../../core/l10n/messages_en.dart';
+import '../../../../core/l10n/messages_ru.dart';
 import '../../../../router/app_router.dart';
 
 @RoutePage()
@@ -12,6 +14,9 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 50.0, left: 16, right: 32),
@@ -47,8 +52,9 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      "Good food is the foundation\nof genuine happiness."
-                          "Let's\ncreate something delicious\ntogether!",
+                      isRussian
+                          ? messagesRu['welcome_msg'] ?? 'Добрая еда — это основа\nистинного счастья.\nДавайте\nсоздадим что-то вкусное\nвместе!'
+                          : messagesEn['welcome_msg'] ?? 'Good food is the foundation\nof genuine happiness.\nLet\'s\ncreate something delicious\ntogether!',
                       style: TextStyle(
                         color: AppColors.darkGrey,
                         fontSize: 16.sp,
@@ -66,10 +72,10 @@ class WelcomeScreen extends StatelessWidget {
                 AutoRouter.of(context).push(const LoginRoute());
               },
               child: Text(
-                "Login",
+                isRussian ? messagesRu['login'] ?? 'Вход' : messagesEn['login'] ?? 'Login',
                 style: TextStyle(
                   color: AppColors.darkGrey,
-                  fontSize: 48.sp,
+                  fontSize: 40.sp,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.underline,
                   decorationColor: AppColors.orange,
@@ -83,10 +89,10 @@ class WelcomeScreen extends StatelessWidget {
                 AutoRouter.of(context).push(const RegisterRoute());
               },
               child: Text(
-                "Register",
+                isRussian ? messagesRu['register'] ?? 'Регистрация' : messagesEn['register'] ?? 'Register',
                 style: TextStyle(
                   color: AppColors.darkGrey,
-                  fontSize: 48.sp,
+                  fontSize: 40.sp,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.underline,
                   decorationColor: AppColors.orange,

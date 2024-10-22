@@ -7,6 +7,9 @@ import 'package:your_recipe/core/colors.dart';
 import 'package:your_recipe/features/auth/presentation/bloc/update_password/update_password_bloc.dart';
 import 'package:your_recipe/router/app_router.dart';
 
+import '../../../../core/l10n/messages_en.dart';
+import '../../../../core/l10n/messages_ru.dart';
+
 @RoutePage()
 class UpdatePasswordScreen extends StatelessWidget {
   const UpdatePasswordScreen({super.key, required this.userId});
@@ -16,6 +19,9 @@ class UpdatePasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController newPasswordController = TextEditingController();
+
+    Locale currentLocale = Localizations.localeOf(context);
+    bool isRussian = currentLocale.languageCode == 'ru';
 
     return Scaffold(
       backgroundColor: AppColors.orange,
@@ -53,7 +59,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      "Enter the verification\ncode that was sent to\nrybakova_k@auca.kg",
+                      isRussian ? messagesRu['verification_instruction'] ?? '' : messagesEn['verification_instruction'] ?? '',
                       style: TextStyle(
                         color: AppColors.white,
                         fontSize: 16.sp,
@@ -66,7 +72,7 @@ class UpdatePasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 30.h),
             Text(
-              "New password",
+              isRussian ? messagesRu['new_password'] ?? '' : messagesEn['new_password'] ?? '',
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 16.sp,
@@ -80,7 +86,7 @@ class UpdatePasswordScreen extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.white,
-                hintText: "Enter your password",
+                hintText: isRussian ? messagesRu['password_hint'] ?? '' : messagesEn['password_hint'] ?? '',
                 hintStyle: const TextStyle(color: AppColors.darkGrey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -90,7 +96,7 @@ class UpdatePasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Text(
-              "Confirm new password",
+              isRussian ? messagesRu['confirm_new_password'] ?? '' : messagesEn['confirm_new_password'] ?? '',
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 16.sp,
@@ -104,7 +110,7 @@ class UpdatePasswordScreen extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.white,
-                hintText: "Enter your password",
+                hintText: isRussian ? messagesRu['password_hint'] ?? '' : messagesEn['password_hint'] ?? '',
                 hintStyle: const TextStyle(color: AppColors.darkGrey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -127,7 +133,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                   context.read<UpdatePasswordBloc>().add(UpdatePasswordRequested(passwordController.text, newPasswordController.text, userId));
                 },
                 child: Text(
-                  "Update your password",
+                  isRussian ? messagesRu['update_password'] ?? '' : messagesEn['update_password'] ?? '',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16.sp,
