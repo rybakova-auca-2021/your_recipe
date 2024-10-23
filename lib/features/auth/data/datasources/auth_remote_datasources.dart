@@ -7,7 +7,7 @@ import '../models/send_code_model.dart';
 import '../models/password_set_model.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<void> login(LoginModel loginModel);
+  Future<int> login(LoginModel loginModel);
   Future<void> register(RegisterModel registerModel);
   Future<PasswordResetResponseEntity> resetPassword(PasswordResetModel passwordResetModel);
   Future<void> sendCode(SendCodeModel sendCodeModel);
@@ -20,15 +20,25 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({required this.dio});
 
   @override
-  Future<void> login(LoginModel loginModel) async {
+  Future<int> login(LoginModel loginModel) async {
     final response = await dio.post(
       'https://ringtail-renewing-terminally.ngrok-free.app/chefmate/users/login/',
       data: loginModel.toJson(),
     );
+
     if (response.statusCode != 200) {
       throw Exception('Login failed');
     }
+
+    final userId = response.data['user_id'];
+
+    if (userId == null) {
+      throw Exception('User ID not found in response');
+    }
+
+    return userId;
   }
+
 
   @override
   Future<void> register(RegisterModel registerModel) async {

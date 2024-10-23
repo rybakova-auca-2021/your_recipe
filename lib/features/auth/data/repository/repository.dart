@@ -19,13 +19,15 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<void> login(LoginEntity loginEntity) async {
+  Future<int> login(LoginEntity loginEntity) async {
     final loginModel = LoginModel(
       email: loginEntity.email,
       password: loginEntity.password,
     );
-    await remoteDataSource.login(loginModel);
+    final userId = await remoteDataSource.login(loginModel);
+    return userId;
   }
+
 
   @override
   Future<void> register(RegisterEntity registerEntity) async {

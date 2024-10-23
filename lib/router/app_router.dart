@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../core/bottom_nav.dart';
 import '../features/auth/presentation/pages/code_verification_screen.dart';
 import '../features/auth/presentation/pages/forgot_password_screen.dart';
@@ -23,7 +24,7 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: OnboardRoute.page, initial: false),
+    AutoRoute(page: OnboardRoute.page, initial: true, guards: [AuthGuard()]),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: WelcomeRoute.page),
     AutoRoute(page: RegisterRoute.page),
@@ -31,11 +32,26 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: CodeVerificationRoute.page),
     AutoRoute(page: UpdatePasswordRoute.page),
     AutoRoute(page: MainRoute.page),
-    AutoRoute(page: BottomNavRoute.page, initial: true),
+    AutoRoute(page: BottomNavRoute.page),
     AutoRoute(page: NotificationsRoute.page),
     AutoRoute(page: MealPlannerRoute.page),
     AutoRoute(page: EditProfileRoute.page),
     AutoRoute(page: AddMealPlanRoute.page),
     AutoRoute(page: FavoritesRoute.page),
   ];
+}
+
+class AuthGuard extends AutoRouteGuard {
+  @override
+  Future<void> onNavigation(NavigationResolver resolver, StackRouter router) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('userId');
+    print(userId);
+
+    if (userId != null) {
+      router.replace(BottomNavRoute());
+    } else {
+      resolver.next();
+    }
+  }
 }

@@ -10,6 +10,10 @@ import 'package:your_recipe/features/auth/presentation/bloc/code_verification/co
 import 'package:your_recipe/features/auth/presentation/bloc/login/login_bloc.dart';
 import 'package:your_recipe/features/auth/presentation/bloc/register/register_bloc.dart';
 import 'package:your_recipe/features/auth/presentation/bloc/update_password/update_password_bloc.dart';
+import 'package:your_recipe/features/profile/domain/usecases/fetch_profile_usecase.dart';
+import 'package:your_recipe/features/profile/domain/usecases/update_profile_usecase.dart';
+import 'package:your_recipe/features/profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:your_recipe/features/profile/presentation/bloc/profile_update/profile_bloc.dart';
 import 'package:your_recipe/router/app_router.dart';
 
 import 'core/bloc/save_token_cubit.dart';
@@ -59,6 +63,16 @@ class _RecipeAppState extends State<RecipeApp> {
         BlocProvider(
           create: (context) => UpdatePasswordBloc(
             GetIt.I<SetPasswordUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ProfileBloc(
+            GetIt.I<FetchProfileUsecase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ProfileUpdateBloc(
+            GetIt.I<UpdateProfileUseCase>(),
           ),
         ),
       ],

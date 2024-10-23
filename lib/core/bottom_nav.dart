@@ -88,11 +88,6 @@ class BottomNavState extends State<BottomNavPage> {
           const SizedBox(
             height: 2,
           ),
-          if (isSelected)
-            SvgPicture.asset(
-              "assets/icons/selected_btm.svg",
-              color: AppColors.orange,
-            ),
         ],
       ),
     );
