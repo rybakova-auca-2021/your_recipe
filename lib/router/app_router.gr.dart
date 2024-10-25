@@ -10,6 +10,25 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AddMealPlanScreen]
+class AddMealPlanRoute extends PageRouteInfo<void> {
+  const AddMealPlanRoute({List<PageRouteInfo>? children})
+      : super(
+          AddMealPlanRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AddMealPlanRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AddMealPlanScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [BottomNavPage]
 class BottomNavRoute extends PageRouteInfo<BottomNavRouteArgs> {
   BottomNavRoute({
@@ -103,6 +122,25 @@ class CodeVerificationRouteArgs {
 }
 
 /// generated route for
+/// [EditProfileScreen]
+class EditProfileRoute extends PageRouteInfo<void> {
+  const EditProfileRoute({List<PageRouteInfo>? children})
+      : super(
+          EditProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EditProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const EditProfileScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [FavoritesScreen]
 class FavoritesRoute extends PageRouteInfo<void> {
   const FavoritesRoute({List<PageRouteInfo>? children})
@@ -193,6 +231,44 @@ class MainRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MainScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [MealPlannerScreen]
+class MealPlannerRoute extends PageRouteInfo<void> {
+  const MealPlannerRoute({List<PageRouteInfo>? children})
+      : super(
+          MealPlannerRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MealPlannerRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MealPlannerScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [NotificationsScreen]
+class NotificationsRoute extends PageRouteInfo<void> {
+  const NotificationsRoute({List<PageRouteInfo>? children})
+      : super(
+          NotificationsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NotificationsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NotificationsScreen();
     },
   );
 }
