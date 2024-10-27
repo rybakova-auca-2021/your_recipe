@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/local/pref.dart';
+import '../pref.dart';
 
 part 'save_token_state.dart';
 
