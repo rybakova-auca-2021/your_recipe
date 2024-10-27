@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../utils/colors.dart';
+import '../../../core/colors.dart';
 import '../data/onboard_data.dart';
 import 'onboarding_indicators.dart';
 

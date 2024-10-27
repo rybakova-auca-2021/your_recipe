@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:your_recipe/features/onboard/widgets/onboarding_item.dart';
 import 'package:your_recipe/router/app_router.dart';
-import 'package:your_recipe/ui/onboard/widgets/onboarding_item.dart';
-import 'package:your_recipe/utils/colors.dart';
+import 'package:your_recipe/core/colors.dart';
 
-import 'data/onboard_data.dart';
+import '../data/onboard_data.dart';
 
 @RoutePage()
 class OnboardScreen extends StatefulWidget {
@@ -65,7 +65,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                               curve: Curves.easeInOut,
                             );
                           } else {
-                            AutoRouter.of(context).push(const LoginRoute());
+                            AutoRouter.of(context).push(const WelcomeRoute());
                           }
                         },
                         child: Text(
