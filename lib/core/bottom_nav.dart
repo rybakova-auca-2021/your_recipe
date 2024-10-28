@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:your_recipe/core/colors.dart';
-import 'package:your_recipe/features/grocery/grocery_screen.dart';
+import 'package:your_recipe/features/grocery/presentation/screens/grocery_screen.dart';
 import 'package:your_recipe/features/ingredients/ingredients_screen.dart';
 import 'package:your_recipe/features/main/main_screen.dart';
 import 'package:your_recipe/features/profile/presentation/pages/profile_screen.dart';

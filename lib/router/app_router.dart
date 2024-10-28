@@ -8,7 +8,7 @@ import '../features/auth/presentation/pages/login_screen.dart';
 import '../features/auth/presentation/pages/register_screen.dart';
 import '../features/auth/presentation/pages/update_password_screen.dart';
 import '../features/auth/presentation/pages/welcome_screen.dart';
-import '../features/grocery/grocery_screen.dart';
+import '../features/grocery/presentation/screens/grocery_screen.dart';
 import '../features/main/main_screen.dart';
 import '../features/onboard/screens/onboard_screen.dart';
 import '../features/profile/presentation/pages/add_meal_plan_screen.dart';
@@ -45,10 +45,10 @@ class AuthGuard extends AutoRouteGuard {
   @override
   Future<void> onNavigation(NavigationResolver resolver, StackRouter router) async {
     final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getInt('userId');
-    print(userId);
+    final token = prefs.getString('accessToken');
+    print(token);
 
-    if (userId != null) {
+    if (token != null) {
       router.replace(BottomNavRoute());
     } else {
       resolver.next();

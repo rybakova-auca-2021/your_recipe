@@ -3,6 +3,7 @@ import 'package:your_recipe/features/auth/data/models/register_model.dart';
 import 'package:your_recipe/features/auth/data/models/password_reset_model.dart';
 import 'package:your_recipe/features/auth/data/models/password_set_model.dart';
 import 'package:your_recipe/features/auth/data/models/send_code_model.dart';
+import 'package:your_recipe/features/auth/domain/entities/login_response_entity.dart';
 import 'package:your_recipe/features/auth/domain/usecases/reset_password_usecase.dart';
 
 import '../../domain/entities/login_entity.dart';
@@ -19,15 +20,18 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<int> login(LoginEntity loginEntity) async {
+  Future<LoginResponseEntity> login(LoginEntity loginEntity) async {
     final loginModel = LoginModel(
       email: loginEntity.email,
       password: loginEntity.password,
     );
-    final userId = await remoteDataSource.login(loginModel);
-    return userId;
+    final loginResponseModel = await remoteDataSource.login(loginModel);
+    return LoginResponseEntity(
+      userId: loginResponseModel.userId,
+      accessToken: loginResponseModel.accessToken,
+      refreshToken: loginResponseModel.refreshToken,
+    );
   }
-
 
   @override
   Future<void> register(RegisterEntity registerEntity) async {
