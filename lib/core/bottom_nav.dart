@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:your_recipe/core/colors.dart';
 import 'package:your_recipe/features/grocery/presentation/screens/grocery_screen.dart';
-import 'package:your_recipe/features/ingredients/ingredients_screen.dart';
+import 'package:your_recipe/features/ingredients/presentation/screen/ingredients_screen.dart';
 import 'package:your_recipe/features/main/main_screen.dart';
 import 'package:your_recipe/features/profile/presentation/pages/profile_screen.dart';
 import '../features/profile/presentation/pages/favorites_screen.dart';
