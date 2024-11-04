@@ -22,6 +22,15 @@ import 'package:your_recipe/features/ingredients/domain/usecase/delete_all_ingre
 import 'package:your_recipe/features/ingredients/domain/usecase/delete_ingredient_usecase.dart';
 import 'package:your_recipe/features/ingredients/domain/usecase/edit_ingredient_usecase.dart';
 import 'package:your_recipe/features/ingredients/domain/usecase/view_ingredients_usecase.dart';
+import 'package:your_recipe/features/main/data/datasource/recipe_remote_data_source.dart';
+import 'package:your_recipe/features/main/data/repository/recipe_repository_impl.dart';
+import 'package:your_recipe/features/main/domain/repository/recipe_repository.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_collections_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_filtered_recipes_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_popular_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_recipe_detail_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_recipes_in_collection_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_searched_recipes_use_case.dart';
 import 'package:your_recipe/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:your_recipe/features/profile/data/repository/profile_repository.dart';
 import 'package:your_recipe/features/profile/domain/repositories/profile_repository.dart';
@@ -94,6 +103,12 @@ void main() async {
         () => IngredientRepositoryImpl(remoteDataSource: GetIt.I<IngredientRemoteDataSource>()),
   );
 
+  GetIt.I.registerLazySingleton<RecipeRemoteDataSource>(
+        () => RecipeRemoteDataSourceImpl(dio: dio),
+  );
+  GetIt.I.registerLazySingleton<RecipeRepository>(
+        () => RecipeRepositoryImpl(remoteDataSource: GetIt.I<RecipeRemoteDataSource>()),
+  );
 
   GetIt.I.registerLazySingleton<LoginUseCase>(() => LoginUseCase(GetIt.I<AuthRepository>()));
   GetIt.I.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(GetIt.I<AuthRepository>()));
@@ -121,6 +136,13 @@ void main() async {
   GetIt.I.registerFactory<EditGroceryBloc>(() => EditGroceryBloc(GetIt.I<EditGroceryUsecase>(), GetIt.I<ViewAllGroceriesBloc>()));
   GetIt.I.registerFactory<ViewAllIngredientsBloc>(() => ViewAllIngredientsBloc(GetIt.I<ViewIngredientsUseCase>()));
 
+
+  GetIt.I.registerLazySingleton<ViewPopularUseCase>(() => ViewPopularUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<ViewCollectionsUseCase>(() => ViewCollectionsUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<ViewFilteredRecipesUseCase>(() => ViewFilteredRecipesUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<ViewRecipeDetailUseCase>(() => ViewRecipeDetailUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<ViewSearchedRecipesUseCase>(() => ViewSearchedRecipesUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<ViewRecipesInCollectionUseCase>(() => ViewRecipesInCollectionUseCase(GetIt.I<RecipeRepository>()));
 
   runApp(const RecipeApp());
 }

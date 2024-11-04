@@ -5,8 +5,8 @@ import 'package:your_recipe/core/colors.dart';
 class RecipeCard extends StatelessWidget {
   final String imageUrl;
   final String title;
-  final int prepTime;
-  final int servings;
+  final String prepTime;
+  final String servings;
 
   const RecipeCard({
     Key? key,
@@ -65,7 +65,7 @@ class RecipeCard extends StatelessWidget {
                     SizedBox(width: 4.h),
                     Text(
                       '$servings',
-                      style: TextStyle(fontSize: 14.sp),
+                      style: TextStyle(fontSize: 14.sp, color: Colors.black),
                     ),
                   ],
                 ),

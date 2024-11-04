@@ -32,6 +32,15 @@ import 'package:your_recipe/features/ingredients/presentation/bloc/delete_all_gr
 import 'package:your_recipe/features/ingredients/presentation/bloc/delete_grocery/delete_ingredient_bloc.dart';
 import 'package:your_recipe/features/ingredients/presentation/bloc/edit_grocery/edit_ingredient_bloc.dart';
 import 'package:your_recipe/features/ingredients/presentation/bloc/view_all_groceries/view_all_ingredients_bloc.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_collections_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_popular_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_recipe_detail_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/view_searched_recipes_use_case.dart';
+import 'package:your_recipe/features/main/presentation/bloc/collection_bloc/collection_bloc.dart';
+import 'package:your_recipe/features/main/presentation/bloc/detail_recipe_bloc/detail_recipe_bloc.dart';
+import 'package:your_recipe/features/main/presentation/bloc/filtered_recipes_bloc/filtered_recipe_bloc.dart';
+import 'package:your_recipe/features/main/presentation/bloc/popular_recipes_bloc/popular_recipes_bloc.dart';
+import 'package:your_recipe/features/main/presentation/bloc/searched_recipes_bloc/searched_recipes_bloc.dart';
 import 'package:your_recipe/features/profile/domain/usecases/fetch_profile_usecase.dart';
 import 'package:your_recipe/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:your_recipe/features/profile/presentation/bloc/profile/profile_bloc.dart';
@@ -44,6 +53,7 @@ import 'core/pref.dart';
 import 'features/auth/domain/usecases/send_code_usecase.dart';
 import 'features/auth/domain/usecases/set_password_usecase.dart';
 import 'features/auth/presentation/bloc/reset_password/reset_password_bloc.dart';
+import 'features/main/domain/usecase/view_filtered_recipes_use_case.dart';
 
 class RecipeApp extends StatefulWidget {
   const RecipeApp({super.key});
@@ -172,6 +182,31 @@ class _RecipeAppState extends State<RecipeApp> {
                 create: (context) => DeleteAllIngredientsBloc(
                   GetIt.I<DeleteAllIngredientsUseCase>(),
                   GetIt.I<ViewAllIngredientsBloc>(),
+                ),
+              ),
+              BlocProvider<CollectionsBloc>(
+                create: (context) => CollectionsBloc(
+                  GetIt.I<ViewCollectionsUseCase>(),
+                ),
+              ),
+              BlocProvider<DetailRecipeBloc>(
+                create: (context) => DetailRecipeBloc(
+                  GetIt.I<ViewRecipeDetailUseCase>(),
+                ),
+              ),
+              BlocProvider<FilteredRecipesBloc>(
+                create: (context) => FilteredRecipesBloc(
+                  GetIt.I<ViewFilteredRecipesUseCase>(),
+                ),
+              ),
+              BlocProvider<PopularRecipesBloc>(
+                create: (context) => PopularRecipesBloc(
+                  GetIt.I<ViewPopularUseCase>(),
+                ),
+              ),
+              BlocProvider<SearchedRecipesBloc>(
+                create: (context) => SearchedRecipesBloc(
+                  GetIt.I<ViewSearchedRecipesUseCase>(),
                 ),
               ),
             ],

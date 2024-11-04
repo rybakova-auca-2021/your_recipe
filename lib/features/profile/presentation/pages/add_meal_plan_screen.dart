@@ -86,8 +86,8 @@ class AddMealPlanScreen extends StatelessWidget {
                 return RecipeCard(
                   imageUrl: 'https://i.ibb.co/LgqrCJ4/food.jpg',
                   title: '$mealType Recipe ${index + 1}',
-                  prepTime: 15 + index * 5,
-                  servings: 2 + index,
+                  prepTime: "${15 + index * 5}",
+                  servings: "${2 + index}",
                 );
               },
             ),

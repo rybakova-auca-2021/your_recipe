@@ -122,6 +122,77 @@ class CodeVerificationRouteArgs {
 }
 
 /// generated route for
+/// [CollectionScreen]
+class CollectionRoute extends PageRouteInfo<void> {
+  const CollectionRoute({List<PageRouteInfo>? children})
+      : super(
+          CollectionRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CollectionRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CollectionScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [DetailCollectionScreen]
+class DetailCollectionRoute extends PageRouteInfo<DetailCollectionRouteArgs> {
+  DetailCollectionRoute({
+    Key? key,
+    required int id,
+    required String title,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailCollectionRoute.name,
+          args: DetailCollectionRouteArgs(
+            key: key,
+            id: id,
+            title: title,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailCollectionRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DetailCollectionRouteArgs>();
+      return DetailCollectionScreen(
+        key: args.key,
+        id: args.id,
+        title: args.title,
+      );
+    },
+  );
+}
+
+class DetailCollectionRouteArgs {
+  const DetailCollectionRouteArgs({
+    this.key,
+    required this.id,
+    required this.title,
+  });
+
+  final Key? key;
+
+  final int id;
+
+  final String title;
+
+  @override
+  String toString() {
+    return 'DetailCollectionRouteArgs{key: $key, id: $id, title: $title}';
+  }
+}
+
+/// generated route for
 /// [EditProfileScreen]
 class EditProfileRoute extends PageRouteInfo<void> {
   const EditProfileRoute({List<PageRouteInfo>? children})
@@ -155,6 +226,25 @@ class FavoritesRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const FavoritesScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [FilterScreen]
+class FilterRoute extends PageRouteInfo<void> {
+  const FilterRoute({List<PageRouteInfo>? children})
+      : super(
+          FilterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'FilterRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const FilterScreen();
     },
   );
 }
@@ -293,22 +383,68 @@ class OnboardRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ProfileScreen]
-class ProfileRoute extends PageRouteInfo<void> {
-  const ProfileRoute({List<PageRouteInfo>? children})
+/// [PopularScreen]
+class PopularRoute extends PageRouteInfo<void> {
+  const PopularRoute({List<PageRouteInfo>? children})
       : super(
-          ProfileRoute.name,
+          PopularRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'ProfileRoute';
+  static const String name = 'PopularRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ProfileScreen();
+      return const PopularScreen();
     },
   );
+}
+
+/// generated route for
+/// [RecipeFilterScreen]
+class RecipeFilterRoute extends PageRouteInfo<RecipeFilterRouteArgs> {
+  RecipeFilterRoute({
+    Key? key,
+    required Map<String, bool> filters,
+    List<PageRouteInfo>? children,
+  }) : super(
+          RecipeFilterRoute.name,
+          args: RecipeFilterRouteArgs(
+            key: key,
+            filters: filters,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'RecipeFilterRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RecipeFilterRouteArgs>();
+      return RecipeFilterScreen(
+        key: args.key,
+        filters: args.filters,
+      );
+    },
+  );
+}
+
+class RecipeFilterRouteArgs {
+  const RecipeFilterRouteArgs({
+    this.key,
+    required this.filters,
+  });
+
+  final Key? key;
+
+  final Map<String, bool> filters;
+
+  @override
+  String toString() {
+    return 'RecipeFilterRouteArgs{key: $key, filters: $filters}';
+  }
 }
 
 /// generated route for
