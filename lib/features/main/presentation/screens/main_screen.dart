@@ -166,11 +166,16 @@ class _MainScreenState extends State<MainScreen> {
                           viewportFraction: 0.6,
                         ),
                         items: state.recipes.map((recipe) {
-                          return CarouselCard(
-                            title: recipe.name,
-                            time: recipe.time,
-                            servings: recipe.numberOfPeople,
-                            imageUrl: recipe.imageUrl,
+                          return GestureDetector(
+                            onTap: () {
+                              AutoRouter.of(context).push(DetailRecipeRoute(id: recipe.id));
+                            },
+                            child: CarouselCard(
+                              title: recipe.name,
+                              time: recipe.time,
+                              servings: recipe.numberOfPeople,
+                              imageUrl: recipe.imageUrl,
+                            ),
                           );
                         }).toList(),
                       );

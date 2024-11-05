@@ -9,6 +9,7 @@ import '../features/auth/presentation/pages/register_screen.dart';
 import '../features/auth/presentation/pages/update_password_screen.dart';
 import '../features/auth/presentation/pages/welcome_screen.dart';
 import '../features/grocery/presentation/screens/grocery_screen.dart';
+import '../features/main/presentation/screens/detail_recipe_screen.dart';
 import '../features/main/presentation/screens/fliter_screen.dart';
 import '../features/main/presentation/screens/main_screen.dart';
 import '../features/main/presentation/screens/popular_screen.dart';
@@ -47,6 +48,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: FilterRoute.page),
     AutoRoute(page: RecipeFilterRoute.page),
     AutoRoute(page: DetailCollectionRoute.page),
+    AutoRoute(page: DetailRecipeRoute.page),
   ];
 }
 

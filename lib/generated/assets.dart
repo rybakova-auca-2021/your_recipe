@@ -2,8 +2,12 @@
 class Assets {
   Assets._();
 
+  static const String fontsMontserratBold = 'assets/fonts/Montserrat-Bold.ttf';
+  static const String fontsMontserratRegular = 'assets/fonts/Montserrat-Regular.ttf';
   static const String iconsGoogle = 'assets/icons/google.svg';
   static const String iconsLogo = 'assets/icons/logo.svg';
+  static const String iconsPerson = 'assets/icons/person.svg';
+  static const String iconsStarFour = 'assets/icons/star_four.svg';
   static const String imagesGoogle = 'assets/images/google.png';
   static const String imagesLogo = 'assets/images/logo.png';
   static const String imagesOnboard1 = 'assets/images/onboard1.png';

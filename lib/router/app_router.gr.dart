@@ -193,6 +193,52 @@ class DetailCollectionRouteArgs {
 }
 
 /// generated route for
+/// [DetailRecipeScreen]
+class DetailRecipeRoute extends PageRouteInfo<DetailRecipeRouteArgs> {
+  DetailRecipeRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailRecipeRoute.name,
+          args: DetailRecipeRouteArgs(
+            key: key,
+            id: id,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailRecipeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DetailRecipeRouteArgs>();
+      return DetailRecipeScreen(
+        key: args.key,
+        id: args.id,
+      );
+    },
+  );
+}
+
+class DetailRecipeRouteArgs {
+  const DetailRecipeRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'DetailRecipeRouteArgs{key: $key, id: $id}';
+  }
+}
+
+/// generated route for
 /// [EditProfileScreen]
 class EditProfileRoute extends PageRouteInfo<void> {
   const EditProfileRoute({List<PageRouteInfo>? children})
@@ -406,7 +452,7 @@ class PopularRoute extends PageRouteInfo<void> {
 class RecipeFilterRoute extends PageRouteInfo<RecipeFilterRouteArgs> {
   RecipeFilterRoute({
     Key? key,
-    required Map<String, bool> filters,
+    required Map<String, dynamic> filters,
     List<PageRouteInfo>? children,
   }) : super(
           RecipeFilterRoute.name,
@@ -439,7 +485,7 @@ class RecipeFilterRouteArgs {
 
   final Key? key;
 
-  final Map<String, bool> filters;
+  final Map<String, dynamic> filters;
 
   @override
   String toString() {

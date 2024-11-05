@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:your_recipe/features/main/presentation/bloc/collection_recipes_b
 
 import '../../../../../../core/colors.dart';
 import '../../../../../../core/widgets/recipe_card.dart';
+import '../../../../router/app_router.dart';
 
 @RoutePage()
 class DetailCollectionScreen extends StatefulWidget {
@@ -77,11 +79,16 @@ class _DetailCollectionScreenState extends State<DetailCollectionScreen> {
                 itemCount: recipes.length,
                 itemBuilder: (context, index) {
                   final recipe = recipes[index];
-                  return RecipeCard(
-                    imageUrl: recipe.imageUrl,
-                    title: recipe.name,
-                    prepTime: "${recipe.time}",
-                    servings: "${recipe.numberOfPeople}",
+                  return GestureDetector(
+                    onTap: () {
+                      AutoRouter.of(context).push(DetailRecipeRoute(id: recipe.id));
+                    },
+                    child: RecipeCard(
+                      imageUrl: recipe.imageUrl,
+                      title: recipe.name,
+                      prepTime: "${recipe.time}",
+                      servings: "${recipe.numberOfPeople}",
+                    ),
                   );
                 },
               );

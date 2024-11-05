@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:your_recipe/core/colors.dart';
 import 'package:your_recipe/core/widgets/recipe_card.dart';
 
+import '../../../../router/app_router.dart';
 import '../../domain/usecase/view_filtered_recipes_use_case.dart';
 import '../bloc/filtered_recipes_bloc/filtered_recipe_bloc.dart';
 
@@ -134,7 +136,7 @@ class _RecipeFilterScreenState extends State<RecipeFilterScreen> {
                         final recipe = recipes[index];
                         return GestureDetector(
                           onTap: () {
-                            // Navigate to recipe page
+                            AutoRouter.of(context).push(DetailRecipeRoute(id: recipe.id));
                           },
                           child: RecipeCard(
                             imageUrl: recipe.imageUrl,
