@@ -13,6 +13,7 @@ import 'package:your_recipe/features/main/domain/usecase/view_recipe_detail_use_
 import 'package:your_recipe/features/main/presentation/bloc/detail_recipe_bloc/detail_recipe_bloc.dart';
 
 import '../../../../generated/assets.dart';
+import '../bloc/save_recipe_bloc/save_recipe_bloc.dart';
 
 @RoutePage()
 class DetailRecipeScreen extends StatefulWidget {
@@ -56,210 +57,221 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.lightBg,
-        elevation: 0,
-        title: const Text('Recipe', style: TextStyle(color: AppColors.orange)),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.orange),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share, color: AppColors.orange),
-            onPressed: () {
-              Share.share('Check out this recipe: Placeholder Recipe');
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              _isFavorited ? Icons.favorite : Icons.favorite_border,
-              color: _isFavorited ? Colors.red : Colors.orange,
-            ),
-            onPressed: () {
-              setState(() {
-                _isFavorited = !_isFavorited;
-              });
-            },
-          ),
-        ],
-      ),
-      body: BlocBuilder<DetailRecipeBloc, DetailRecipeState>(
+      body: BlocListener<DetailRecipeBloc, DetailRecipeState>(
         bloc: _blocDetailRecipe,
-        builder: (context, state) {
-          if (state is DetailRecipeLoading) {
-            return const Center(child: CircularProgressIndicator(color: Colors.orange));
-          } else if (state is DetailRecipeLoaded) {
-            final detailRecipe = state.recipe;
-            return Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.r),
-                      color: AppColors.lightBg,
-                    ),
-                    padding: EdgeInsets.all(16.r),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 300.h,
-                          width: double.infinity,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child: Image.network(
-                              detailRecipe.imageUrl,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20.h),
-                        Text(
-                          detailRecipe.name,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Montserrat',
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Text(
-                          detailRecipe.shortDesc,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Montserrat',
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Row(
-                          children: [
-                            Icon(Icons.access_time, size: 16.r),
-                            SizedBox(width: 4.w),
-                            Text("${detailRecipe.time} min"),
-                            SizedBox(width: 16.w),
-                            SvgPicture.asset(Assets.iconsStarFour),
-                            SizedBox(width: 4.w),
-                            Text(detailRecipe.difficulty),
-                            SizedBox(width: 16.w),
-                            SvgPicture.asset(Assets.iconsPerson),
-                            SizedBox(width: 4.w),
-                            Text('${detailRecipe.numberOfPeople} servings'),
-                          ],
-                        ),
-                        SizedBox(height: 16.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            buildCircularIndicator(
-                              percent: detailRecipe.protein / 100,
-                              value: '${(detailRecipe.protein).toStringAsFixed(1)}g',
-                              label: 'Protein',
-                            ),
-                            SizedBox(width: 24.w),
-                            buildCircularIndicator(
-                              percent: detailRecipe.carbs / 100,
-                              value: '${(detailRecipe.carbs).toStringAsFixed(1)}g',
-                              label: 'Carbs',
-                            ),
-                            SizedBox(width: 24.w),
-                            buildCircularIndicator(
-                              percent: detailRecipe.fat / 100,
-                              value: '${(detailRecipe.fat).toStringAsFixed(1)}g',
-                              label: 'Fat',
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16.h),
-                        Row(
-                          children: [
-                            Text(
-                              'Ingredients',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Montserrat',
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                _ingredientsExpanded ? Icons.expand_less : Icons.expand_more,
-                                color: AppColors.black,
-                              ),
+        listener: (context, state) {
+          if (state is DetailRecipeLoaded) {
+            _isFavorited = state.recipe.isFavorite;
+          }
+        },
+        child: BlocBuilder<DetailRecipeBloc, DetailRecipeState>(
+          bloc: _blocDetailRecipe,
+          builder: (context, state) {
+            if (state is DetailRecipeLoading) {
+              return const Center(child: CircularProgressIndicator(color: Colors.orange));
+            } else if (state is DetailRecipeLoaded) {
+              final detailRecipe = state.recipe;
+              return Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.r),
+                        color: AppColors.lightBg,
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 16.r),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppBar(
+                            backgroundColor: AppColors.lightBg,
+                            elevation: 0,
+                            title: const Text('Recipe', style: TextStyle(color: AppColors.orange)),
+                            centerTitle: true,
+                            leading: IconButton(
+                              icon: const Icon(Icons.arrow_back, color: AppColors.orange),
                               onPressed: () {
-                                setState(() {
-                                  _ingredientsExpanded = !_ingredientsExpanded;
-                                });
+                                Navigator.pop(context);
                               },
                             ),
-                          ],
-                        ),
-                        ..._buildIngredientList(detailRecipe.ingredients),
-                        SizedBox(height: 16.h),
-                        Visibility(
-                          visible: _showButton,
-                          child: SizedBox(
-                            height: 46.h,
+                            actions: [
+                              IconButton(
+                                icon: const Icon(Icons.share, color: AppColors.orange),
+                                onPressed: () {
+                                  Share.share('Check out this recipe: Placeholder Recipe');
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  _isFavorited ? Icons.favorite : Icons.favorite_border,
+                                  color: _isFavorited ? Colors.red : Colors.orange,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isFavorited = !_isFavorited;
+                                  });
+                                  context.read<RecipeFavoriteBloc>().add(
+                                    SaveRecipeEvent(detailRecipe.id),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 300.h,
                             width: double.infinity,
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16.r),
-                                      side: const BorderSide(color: AppColors.orange)
-                                  ),
-                                  backgroundColor: AppColors.lightBg
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image.network(
+                                detailRecipe.imageUrl,
+                                fit: BoxFit.cover,
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  _showButton = false;
-                                });
-                              },
-                              label: const Text('Add to Grocery List', style: TextStyle(color: AppColors.orange),),
-                              icon: const Icon(Icons.add, color: AppColors.orange,),
                             ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              'Steps',
-                              style: TextStyle(
+                          SizedBox(height: 20.h),
+                          Text(
+                            detailRecipe.name,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          Text(
+                            detailRecipe.shortDesc,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          Row(
+                            children: [
+                              Icon(Icons.access_time, size: 16.r),
+                              SizedBox(width: 4.w),
+                              Text("${detailRecipe.time} min"),
+                              SizedBox(width: 16.w),
+                              SvgPicture.asset(Assets.iconsStarFour),
+                              SizedBox(width: 4.w),
+                              Text(detailRecipe.difficulty),
+                              SizedBox(width: 16.w),
+                              SvgPicture.asset(Assets.iconsPerson),
+                              SizedBox(width: 4.w),
+                              Text('${detailRecipe.numberOfPeople} servings'),
+                            ],
+                          ),
+                          SizedBox(height: 16.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              buildCircularIndicator(
+                                percent: detailRecipe.protein / 100,
+                                value: '${(detailRecipe.protein).toStringAsFixed(1)}g',
+                                label: 'Protein',
+                              ),
+                              SizedBox(width: 24.w),
+                              buildCircularIndicator(
+                                percent: detailRecipe.carbs / 100,
+                                value: '${(detailRecipe.carbs).toStringAsFixed(1)}g',
+                                label: 'Carbs',
+                              ),
+                              SizedBox(width: 24.w),
+                              buildCircularIndicator(
+                                percent: detailRecipe.fat / 100,
+                                value: '${(detailRecipe.fat).toStringAsFixed(1)}g',
+                                label: 'Fat',
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16.h),
+                          Row(
+                            children: [
+                              Text(
+                                'Ingredients',
+                                style: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.normal,
-                                  fontFamily: 'Montserrat'
+                                  fontFamily: 'Montserrat',
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  _ingredientsExpanded ? Icons.expand_less : Icons.expand_more,
+                                  color: AppColors.black,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _ingredientsExpanded = !_ingredientsExpanded;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          ..._buildIngredientList(detailRecipe.ingredients),
+                          SizedBox(height: 16.h),
+                          Visibility(
+                            visible: _showButton,
+                            child: SizedBox(
+                              height: 46.h,
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16.r),
+                                        side: const BorderSide(color: AppColors.orange)
+                                    ),
+                                    backgroundColor: AppColors.lightBg
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _showButton = false;
+                                  });
+                                },
+                                label: const Text('Add to Grocery List', style: TextStyle(color: AppColors.orange),),
+                                icon: const Icon(Icons.add, color: AppColors.orange,),
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(
-                                _stepsExpanded ? Icons.expand_less : Icons.expand_more,
-                                color: Colors.black,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Steps',
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Montserrat'
+                                ),
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  _stepsExpanded = !_stepsExpanded;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        ..._buildStepsList(detailRecipe.steps),
-                      ],
+                              IconButton(
+                                icon: Icon(
+                                  _stepsExpanded ? Icons.expand_less : Icons.expand_more,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _stepsExpanded = !_stepsExpanded;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          ..._buildStepsList(detailRecipe.steps),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            );
-          } else if(state is DetailRecipeError) {
-            return Center(
-              child: Text('Error: ${state.message}',),
-            );
-          }
-          return const Center(child: Text('Detail recipe is not available.'));
-        },
+                ],
+              );
+            } else if(state is DetailRecipeError) {
+              return Center(
+                child: Text('Error: ${state.message}',),
+              );
+            }
+            return const Center(child: Text('Detail recipe is not available.'));
+          },
+        ),
       ),
     );
   }

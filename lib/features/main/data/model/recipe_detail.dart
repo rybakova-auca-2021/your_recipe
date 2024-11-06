@@ -14,6 +14,7 @@ class RecipeDetail {
   final String ingredients;
   final String steps;
   final String imageUrl;
+  final bool isFavorite;
 
   RecipeDetail({
     required this.id,
@@ -28,7 +29,8 @@ class RecipeDetail {
     required this.fat,
     required this.ingredients,
     required this.steps,
-    required this.imageUrl
+    required this.imageUrl,
+    required this.isFavorite
   });
 
   factory RecipeDetail.fromJson(Map<String, dynamic> json) {
@@ -46,6 +48,7 @@ class RecipeDetail {
       ingredients: json['ingredients'],
       steps: json['steps'],
       imageUrl: json['image_url'],
+      isFavorite: json['is_favorite'],
     );
   }
 
@@ -64,6 +67,7 @@ class RecipeDetail {
       'ingredients': ingredients,
       'steps': steps,
       'image_url': imageUrl,
+      'is_favorite': isFavorite,
     };
   }
 
@@ -81,7 +85,8 @@ class RecipeDetail {
       fat: fat,
       ingredients: ingredients,
       steps: steps,
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
+      isFavorite: isFavorite
     );
   }
 }

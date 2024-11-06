@@ -53,7 +53,11 @@ import 'core/pref.dart';
 import 'features/auth/domain/usecases/send_code_usecase.dart';
 import 'features/auth/domain/usecases/set_password_usecase.dart';
 import 'features/auth/presentation/bloc/reset_password/reset_password_bloc.dart';
+import 'features/main/domain/usecase/fetch_favorites_use_case.dart';
+import 'features/main/domain/usecase/save_recipe_use_case.dart';
 import 'features/main/domain/usecase/view_filtered_recipes_use_case.dart';
+import 'features/main/presentation/bloc/save_recipe_bloc/save_recipe_bloc.dart';
+import 'features/profile/presentation/bloc/fetch_favorite_bloc/fetch_favorite_bloc.dart';
 
 class RecipeApp extends StatefulWidget {
   const RecipeApp({super.key});
@@ -207,6 +211,16 @@ class _RecipeAppState extends State<RecipeApp> {
               BlocProvider<SearchedRecipesBloc>(
                 create: (context) => SearchedRecipesBloc(
                   GetIt.I<ViewSearchedRecipesUseCase>(),
+                ),
+              ),
+              BlocProvider<FavoritesBloc>(
+                create: (context) => FavoritesBloc(
+                  GetIt.I<FetchFavoritesUseCase>(),
+                ),
+              ),
+              BlocProvider<RecipeFavoriteBloc>(
+                create: (context) => RecipeFavoriteBloc(
+                  GetIt.I<SaveRecipeUseCase>(),
                 ),
               ),
             ],

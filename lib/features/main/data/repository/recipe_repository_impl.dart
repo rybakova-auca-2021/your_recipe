@@ -1,4 +1,5 @@
 import 'package:your_recipe/features/main/domain/entity/collection_entity.dart';
+import 'package:your_recipe/features/main/domain/entity/favorite_entity.dart';
 import 'package:your_recipe/features/main/domain/entity/recipe_detail_entity.dart';
 import 'package:your_recipe/features/main/domain/entity/recipe_entity.dart';
 
@@ -44,5 +45,17 @@ class RecipeRepositoryImpl implements RecipeRepository {
   Future<List<RecipeDetailEntity>> collectionsRecipes(int id) async {
     final recipes = await remoteDataSource.collectionRecipes(id);
     return recipes.map((recipe) => recipe.toEntity()).toList();
+  }
+
+  @override
+  Future<List<PopularRecipeEntity>> fetchFavoriteRecipes() async {
+    final recipes = await remoteDataSource.fetchFavoriteRecipes();
+    return recipes.map((recipe) => recipe.toEntity()).toList();
+  }
+
+  @override
+  Future<FavoriteEntity> saveRecipe(int id) async {
+    final recipes = await remoteDataSource.saveRecipe(id);
+    return recipes.toEntity();
   }
 }

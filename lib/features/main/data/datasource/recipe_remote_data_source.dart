@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:your_recipe/features/main/data/model/collection.dart';
+import 'package:your_recipe/features/main/data/model/favorite_recipe.dart';
 import 'package:your_recipe/features/main/data/model/recipe.dart';
 import 'package:your_recipe/features/main/data/model/recipe_detail.dart';
 
@@ -11,6 +12,8 @@ abstract class RecipeRemoteDataSource {
   Future<List<PopularRecipe>> searchRecipes(String query);
   Future<RecipeDetail> fetchRecipeById(int id);
   Future<List<RecipeDetail>> collectionRecipes(int id);
+  Future<FavoriteRecipe> saveRecipe(int id);
+  Future<List<PopularRecipe>> fetchFavoriteRecipes();
 }
 
 class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
@@ -147,6 +150,47 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
       return data.map((item) => RecipeDetail.fromJson(item)).toList();
     } else {
       throw Exception('Failed to fetch collection\'s recipes');
+    }
+  }
+
+  @override
+  Future<FavoriteRecipe> saveRecipe(int id) async {
+    final accessToken = await _getAccessToken();
+
+    final response = await dio.post(
+      'https://ringtail-renewing-terminally.ngrok-free.app/chefmate/recipe/recipes/$id/favorite/',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return FavoriteRecipe.fromJson(response.data);
+    } else {
+      throw Exception('Failed to fetch collection\'s recipes');
+    }
+  }
+
+  @override
+  Future<List<PopularRecipe>> fetchFavoriteRecipes() async {
+    final accessToken = await _getAccessToken();
+
+    final response = await dio.get(
+      'https://ringtail-renewing-terminally.ngrok-free.app/chefmate/recipe/favorites/',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = response.data;
+      return data.map((item) => PopularRecipe.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to fetch favorite recipes');
     }
   }
 }

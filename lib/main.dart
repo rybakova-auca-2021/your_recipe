@@ -48,6 +48,8 @@ import 'features/auth/domain/usecases/set_password_usecase.dart';
 import 'features/grocery/data/repository/grocery_repository_impl.dart';
 import 'features/ingredients/data/repository/ingredient_repository_impl.dart';
 import 'features/ingredients/presentation/bloc/view_all_groceries/view_all_ingredients_bloc.dart';
+import 'features/main/domain/usecase/fetch_favorites_use_case.dart';
+import 'features/main/domain/usecase/save_recipe_use_case.dart';
 import 'features/profile/presentation/bloc/profile_update/profile_bloc.dart';
 
 void main() async {
@@ -143,6 +145,8 @@ void main() async {
   GetIt.I.registerLazySingleton<ViewRecipeDetailUseCase>(() => ViewRecipeDetailUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<ViewSearchedRecipesUseCase>(() => ViewSearchedRecipesUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<ViewRecipesInCollectionUseCase>(() => ViewRecipesInCollectionUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<FetchFavoritesUseCase>(() => FetchFavoritesUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<SaveRecipeUseCase>(() => SaveRecipeUseCase(GetIt.I<RecipeRepository>()));
 
   runApp(const RecipeApp());
 }

@@ -12,6 +12,7 @@ class RecipeDetailEntity {
   final String ingredients;
   final String steps;
   final String imageUrl;
+  final bool isFavorite;
 
   RecipeDetailEntity({
     required this.id,
@@ -26,6 +27,7 @@ class RecipeDetailEntity {
     required this.fat,
     required this.ingredients,
     required this.steps,
-    required this.imageUrl
+    required this.imageUrl,
+    required this.isFavorite
   });
 }
