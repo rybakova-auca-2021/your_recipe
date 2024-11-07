@@ -21,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('userId', response.userId);
       await prefs.setString('accessToken', response.accessToken);
-      print("access ${response.accessToken}");
+      await prefs.setString('refreshToken', response.refreshToken);
       emit(LoginSuccess(response.userId));
     } catch (e) {
       emit(LoginError("Login failed: ${e.toString()}"));
