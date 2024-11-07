@@ -9,10 +9,12 @@ import 'package:get_it/get_it.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:your_recipe/core/colors.dart';
+import 'package:your_recipe/features/grocery/presentation/bloc/add_groceries/add_groceries_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_recipe_detail_use_case.dart';
 import 'package:your_recipe/features/main/presentation/bloc/detail_recipe_bloc/detail_recipe_bloc.dart';
 
 import '../../../../generated/assets.dart';
+import '../../../grocery/domain/entities/grocery_item_entity.dart';
 import '../bloc/save_recipe_bloc/save_recipe_bloc.dart';
 
 @RoutePage()
@@ -31,6 +33,7 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
   bool _stepsExpanded = false;
   bool _isFavorited = false;
   bool _showButton = true;
+  final Set<String> _checkedIngredients = {};
 
   final Random random = Random();
 
@@ -218,19 +221,38 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
                               width: double.infinity,
                               child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16.r),
-                                        side: const BorderSide(color: AppColors.orange)
-                                    ),
-                                    backgroundColor: AppColors.lightBg
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                    side: const BorderSide(color: AppColors.orange),
+                                  ),
+                                  backgroundColor: AppColors.lightBg,
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _showButton = false;
+                                    final groceryItems = _checkedIngredients
+                                        .map((ingredient) {
+                                      final parsed = _parseIngredient(ingredient);
+                                      if (parsed != null) {
+                                        return GroceryItemEntity(
+                                          name: parsed['name']!,
+                                          quantity: parsed['quantity']!,
+                                        );
+                                      }
+                                      return null;
+                                    })
+                                        .whereType<GroceryItemEntity>()
+                                        .toList();
+                                    context.read<AddGroceriesBloc>().add(GroceriesAdded(groceries: groceryItems));
                                   });
                                 },
-                                label: const Text('Add to Grocery List', style: TextStyle(color: AppColors.orange),),
-                                icon: const Icon(Icons.add, color: AppColors.orange,),
+                                label: const Text(
+                                  'Add to Grocery List',
+                                  style: TextStyle(color: AppColors.orange),
+                                ),
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: AppColors.orange,
+                                ),
                               ),
                             ),
                           ),
@@ -279,12 +301,10 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
   List<Widget> _buildIngredientList(String ingredients) {
     List<String> ingredientList = ingredients.split('\r\n');
 
-    return ingredientList
-        .asMap()
-        .entries
-        .map((entry) {
+    return ingredientList.asMap().entries.map((entry) {
       int index = entry.key;
       String ingredient = entry.value;
+
       return Visibility(
         visible: _ingredientsExpanded || index < 3,
         child: Row(
@@ -294,9 +314,15 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.r),
               ),
-              value: false,
-              onChanged: (bool? value) {
-               // todo
+              value: _checkedIngredients.contains(ingredient),
+              onChanged: (bool? isChecked) {
+                setState(() {
+                  if (isChecked == true) {
+                    _checkedIngredients.add(ingredient);
+                  } else {
+                    _checkedIngredients.remove(ingredient);
+                  }
+                });
               },
             ),
             Expanded(
@@ -309,6 +335,17 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
         ),
       );
     }).toList();
+  }
+
+  Map<String, String>? _parseIngredient(String ingredient) {
+    final match = RegExp(r'^(\d+)\s*(.*)').firstMatch(ingredient);
+    if (match != null) {
+      return {
+        'quantity': match.group(1) ?? '',
+        'name': match.group(2) ?? ''
+      };
+    }
+    return null;
   }
 
   List<Widget> _buildStepsList(String steps) {

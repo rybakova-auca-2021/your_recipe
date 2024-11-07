@@ -46,6 +46,7 @@ import 'features/auth/domain/usecases/reset_password_usecase.dart';
 import 'features/auth/domain/usecases/send_code_usecase.dart';
 import 'features/auth/domain/usecases/set_password_usecase.dart';
 import 'features/grocery/data/repository/grocery_repository_impl.dart';
+import 'features/grocery/domain/usecase/add_groceries_use_case.dart';
 import 'features/ingredients/data/repository/ingredient_repository_impl.dart';
 import 'features/ingredients/presentation/bloc/view_all_groceries/view_all_ingredients_bloc.dart';
 import 'features/main/domain/usecase/fetch_favorites_use_case.dart';
@@ -125,6 +126,7 @@ void main() async {
   GetIt.I.registerLazySingleton<AddGroceryUsecase>(() => AddGroceryUsecase(GetIt.I<GroceryRepository>()));
   GetIt.I.registerLazySingleton<DeleteGroceryUsecase>(() => DeleteGroceryUsecase(GetIt.I<GroceryRepository>()));
   GetIt.I.registerLazySingleton<DeleteAllGroceriesUsecase>(() => DeleteAllGroceriesUsecase(GetIt.I<GroceryRepository>()));
+  GetIt.I.registerLazySingleton<AddGroceriesUseCase>(() => AddGroceriesUseCase(GetIt.I<GroceryRepository>()));
 
   GetIt.I.registerLazySingleton<ViewIngredientsUseCase>(() => ViewIngredientsUseCase(GetIt.I<IngredientRepository>()));
   GetIt.I.registerLazySingleton<EditIngredientUseCase>(() => EditIngredientUseCase(GetIt.I<IngredientRepository>()));

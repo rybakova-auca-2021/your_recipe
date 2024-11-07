@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:your_recipe/features/grocery/domain/entities/grocery_item_entity.dart';
 import 'package:your_recipe/features/grocery/domain/entities/grocery_item_response_entity.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/view_groceries_usecase.dart';
 import 'package:your_recipe/features/grocery/presentation/bloc/add_grocery/add_grocery_bloc.dart';
@@ -24,7 +23,7 @@ class GroceryScreen extends StatefulWidget {
 
 class _GroceryListPageState extends State<GroceryScreen> {
   final _blocAllGroceries = ViewAllGroceriesBloc(
-      GetIt.I<ViewGroceriesUsecase>(),
+    GetIt.I<ViewGroceriesUsecase>(),
   );
 
   bool _isSelectionMode = false;
@@ -95,7 +94,6 @@ class _GroceryListPageState extends State<GroceryScreen> {
             CupertinoDialogAction(
               onPressed: () {
                 context.read<AddGroceryBloc>().add(GroceryAdded(name: controller.text, quantity: "1"));
-                _loadGroceries();
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -130,7 +128,6 @@ class _GroceryListPageState extends State<GroceryScreen> {
               child: const Text('OK', style: TextStyle(color: AppColors.orange)),
               onPressed: () {
                 context.read<DeleteAllGroceriesBloc>().add(AllGroceriesDeleted());
-                _loadGroceries();
                 Navigator.of(context).pop();
                 setState(() {
                   _isSelectionMode = false;
@@ -172,57 +169,59 @@ class _GroceryListPageState extends State<GroceryScreen> {
         child: Column(
           children: [
             Expanded(
-              child: BlocBuilder<ViewAllGroceriesBloc, ViewAllGroceriesState>(
-                bloc: _blocAllGroceries,
-                builder: (context, state) {
-
-                  if (state is ViewAllGroceriesLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(color: Colors.orange),
-                    );
-                  } else if (state is ViewAllGroceriesSuccess) {
-                    groceries = state.groceries;
-
-                    if (groceries.isEmpty) {
+              child: RefreshIndicator(
+                onRefresh: _loadGroceries,
+                child: BlocBuilder<ViewAllGroceriesBloc, ViewAllGroceriesState>(
+                  bloc: _blocAllGroceries,
+                  builder: (context, state) {
+                    if (state is ViewAllGroceriesLoading) {
                       return const Center(
+                        child: CircularProgressIndicator(color: Colors.orange),
+                      );
+                    } else if (state is ViewAllGroceriesSuccess) {
+                      groceries = state.groceries;
+
+                      if (groceries.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            "No data yet",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        );
+                      }
+
+                      if (_selectedItems.length != groceries.length) {
+                        _selectedItems = List.filled(groceries.length, false);
+                      }
+
+                      return ListView.builder(
+                        itemCount: groceries.length,
+                        itemBuilder: (context, index) {
+                          final groceryItem = groceries[index];
+                          return GroceryItemTile(
+                            groceryItem: groceryItem,
+                            isSelectionMode: _isSelectionMode,
+                            isSelected: _selectedItems[index],
+                            onSelectChanged: (value) {
+                              setState(() {
+                                _selectedItems[index] = value!;
+                              });
+                            },
+                          );
+                        },
+                      );
+                    } else if (state is ViewAllGroceriesError) {
+                      return Center(
                         child: Text(
-                          "No data yet",
-                          style: TextStyle(color: Colors.grey),
+                          "Failed to load groceries",
+                          style: TextStyle(color: Colors.red),
                         ),
                       );
                     }
 
-                    if (_selectedItems.length != groceries.length) {
-                      _selectedItems = List.filled(groceries.length, false);
-                    }
-
-                    return ListView.builder(
-                      itemCount: groceries.length,
-                      itemBuilder: (context, index) {
-                        final groceryItem = groceries[index];
-                        return GroceryItemTile(
-                          groceryItem: groceryItem,
-                          isSelectionMode: _isSelectionMode,
-                          isSelected: _selectedItems[index],
-                          onSelectChanged: (value) {
-                            setState(() {
-                              _selectedItems[index] = value!;
-                            });
-                          },
-                        );
-                      },
-                    );
-                  } else if (state is ViewAllGroceriesError) {
-                    return Center(
-                      child: Text(
-                        "Failed to load groceries",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
-
-                  return Container();
-                },
+                    return Container();
+                  },
+                ),
               ),
             ),
             SizedBox(height: 16.h),
@@ -298,3 +297,4 @@ class _GroceryListPageState extends State<GroceryScreen> {
     );
   }
 }
+

@@ -53,6 +53,8 @@ import 'core/pref.dart';
 import 'features/auth/domain/usecases/send_code_usecase.dart';
 import 'features/auth/domain/usecases/set_password_usecase.dart';
 import 'features/auth/presentation/bloc/reset_password/reset_password_bloc.dart';
+import 'features/grocery/domain/usecase/add_groceries_use_case.dart';
+import 'features/grocery/presentation/bloc/add_groceries/add_groceries_bloc.dart';
 import 'features/main/domain/usecase/fetch_favorites_use_case.dart';
 import 'features/main/domain/usecase/save_recipe_use_case.dart';
 import 'features/main/domain/usecase/view_filtered_recipes_use_case.dart';
@@ -138,6 +140,12 @@ class _RecipeAppState extends State<RecipeApp> {
               BlocProvider<AddGroceryBloc>(
                 create: (context) => AddGroceryBloc(
                   GetIt.I<AddGroceryUsecase>(),
+                  GetIt.I<ViewAllGroceriesBloc>(),
+                ),
+              ),
+              BlocProvider<AddGroceriesBloc>(
+                create: (context) => AddGroceriesBloc(
+                  GetIt.I<AddGroceriesUseCase>(),
                   GetIt.I<ViewAllGroceriesBloc>(),
                 ),
               ),

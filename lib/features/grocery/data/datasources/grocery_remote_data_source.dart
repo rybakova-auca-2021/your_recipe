@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class GroceryRemoteDataSource {
   Future<GroceryItemResponse> addGrocery(GroceryItemModel groceryItem);
+  Future<List<GroceryItemResponse>> addGroceries(List<GroceryItemModel> groceryItems);
   Future<GroceryItemResponse> editGrocery(int id, GroceryItemModel groceryItem);
   Future<List<GroceryItemResponse>> viewGroceries();
   Future<void> deleteGrocery(int id);
@@ -39,6 +40,31 @@ class GroceryRemoteDataSourceImpl implements GroceryRemoteDataSource {
       return GroceryItemResponse.fromJson(response.data);
     } else {
       throw Exception('Adding grocery failed');
+    }
+  }
+
+  @override
+  Future<List<GroceryItemResponse>> addGroceries(List<GroceryItemModel> groceryItems) async {
+    final accessToken = await _getAccessToken();
+
+    final List<Map<String, dynamic>> jsonItems = groceryItems.map((item) => item.toJson()).toList();
+
+    final response = await dio.post(
+      'https://ringtail-renewing-terminally.ngrok-free.app/chefmate/grocery/add/groceries/',
+      data: jsonItems,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+
+    if (response.statusCode == 201) {
+      return (response.data as List)
+          .map((item) => GroceryItemResponse.fromJson(item))
+          .toList();
+    } else {
+      throw Exception('Adding groceries failed');
     }
   }
 

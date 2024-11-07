@@ -26,6 +26,23 @@ class GroceryRepositoryImpl implements GroceryRepository {
   }
 
   @override
+  Future<List<GroceryItemResponseEntity>> addGroceries(List<GroceryItemEntity> groceryItems) async {
+    final groceryItemModels = groceryItems.map((item) => GroceryItemModel(
+      name: item.name,
+      quantity: item.quantity,
+    )).toList();
+
+    final responseList = await remoteDataSource.addGroceries(groceryItemModels);
+
+    return responseList.map((response) => GroceryItemResponseEntity(
+      id: response.id,
+      user: response.user,
+      name: response.name,
+      quantity: response.quantity,
+    )).toList();
+  }
+
+  @override
   Future<void> deleteAll() async {
     await remoteDataSource.deleteAll();
   }
