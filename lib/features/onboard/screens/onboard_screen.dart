@@ -58,7 +58,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Container(
-                      height: 56.h,
+                      height: 46.h,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: AppColors.orange,
@@ -87,7 +87,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 16.h),
                 ],
               ),
             ),

@@ -21,12 +21,29 @@ class OnboardingPageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double imageHeight = screenHeight * 0.50.h;
+    double imageHeight = screenHeight * 0.30.h;
 
     return Container(
-      alignment: Alignment.topCenter,
+      alignment: Alignment.center,
       child: Column(
         children: [
+          SizedBox(height: 40.h),
+          ClipRect(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Image.asset(
+                dataRPBoard.image,
+                fit: BoxFit.cover,
+                height: imageHeight,
+              ),
+            ),
+          ),
+          SizedBox(height: 40.h),
+          OnboardingIndicators(
+            currentIndex: currentIndex,
+            itemCount: itemCount,
+          ),
+          SizedBox(height: 40.h),
           SizedBox(
             height: 110,
             child: Padding(
@@ -44,7 +61,7 @@ class OnboardingPageItem extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 8.h),
           SizedBox(
             height: 80.h,
             child: Padding(
@@ -54,28 +71,10 @@ class OnboardingPageItem extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   textStyle: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 14.sp,
                     color: AppColors.darkGrey,
                     fontWeight: FontWeight.w400,
                   ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 24.h),
-          OnboardingIndicators(
-            currentIndex: currentIndex,
-            itemCount: itemCount,
-          ),
-          SizedBox(height: 37.h),
-          Expanded(
-            child: ClipRect(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Image.asset(
-                  dataRPBoard.image,
-                  fit: BoxFit.cover,
-                  height: imageHeight,
                 ),
               ),
             ),

@@ -18,6 +18,7 @@ class WelcomeScreen extends StatelessWidget {
     bool isRussian = currentLocale.languageCode == 'ru';
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(top: 50.0, left: 16, right: 32),
         child: Column(
@@ -31,14 +32,14 @@ class WelcomeScreen extends StatelessWidget {
                   "WEL",
                   style: TextStyle(
                       color: AppColors.orange,
-                      fontSize: 100.sp,
+                      fontSize: 0.15.sh,
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "COM",
                   style: TextStyle(
                       color: AppColors.orange,
-                      fontSize: 100.sp,
+                      fontSize: 0.15.sh,
                       fontWeight: FontWeight.bold),
                 ),
                 Row(
@@ -47,7 +48,7 @@ class WelcomeScreen extends StatelessWidget {
                       "E",
                       style: TextStyle(
                           color: AppColors.orange,
-                          fontSize: 100.sp,
+                          fontSize: 0.15.sh,
                           fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
@@ -65,8 +66,6 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: 8.w),
-            SizedBox(height: 40.h),
             TextButton(
               onPressed: () {
                 AutoRouter.of(context).push(const LoginRoute());

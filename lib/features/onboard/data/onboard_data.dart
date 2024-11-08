@@ -34,7 +34,7 @@ List<OnboardingData> getOnboardingData(BuildContext context) {
     OnboardingData(
       title: isRussian ? messagesRu['onboarding_title_3'] ?? 'Default Title 3' : messagesEn['onboarding_title_3'] ?? 'Need More Ingredients?',
       desc: isRussian ? messagesRu['onboarding_desc_3'] ?? 'Default Description 3' : messagesEn['onboarding_desc_3'] ?? 'Easily add missing ingredients to your shopping list with just a tap',
-      image: Assets.imagesOnboard4,
+      image: Assets.imagesOnboard3,
     ),
   ];
 }
