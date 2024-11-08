@@ -159,7 +159,7 @@ class _MainScreenState extends State<MainScreen> {
                     } else if (state is PopularRecipesLoaded) {
                       return CarouselSlider(
                         options: CarouselOptions(
-                          height: 240.h,
+                          height: 250.h,
                           enableInfiniteScroll: true,
                           autoPlay: false,
                           enlargeCenterPage: true,
@@ -179,6 +179,7 @@ class _MainScreenState extends State<MainScreen> {
                           );
                         }).toList(),
                       );
+
                     } else {
                       return const Center(child: Text('Failed to load popular recipes'));
                     }

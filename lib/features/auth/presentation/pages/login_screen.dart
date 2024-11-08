@@ -24,7 +24,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.orange,
       body: Padding(
-        padding: const EdgeInsets.only(top: 50.0, left: 16, right: 32),
+        padding: const EdgeInsets.only(top: 30.0, left: 16, right: 32, bottom: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                   "LOG",
                   style: TextStyle(
                       color: AppColors.white,
-                      fontSize: 90.sp,
+                      fontSize: 0.13.sh,
                       fontWeight: FontWeight.bold),
                 ),
                 Row(
@@ -45,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                       "IN",
                       style: TextStyle(
                           color: AppColors.white,
-                          fontSize: 90.sp,
+                          fontSize: 0.13.sh,
                           fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
@@ -61,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 8.h),
             Text(
               isRussian ? messagesRu['email_label'] ?? '' : messagesEn['email_label'] ?? '',
               style: TextStyle(
@@ -85,7 +85,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 8.h),
             Text(
               isRussian ? messagesRu['password_label'] ?? '' : messagesEn['password_label'] ?? '',
               style: TextStyle(
@@ -125,7 +125,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 15.h),
+            Spacer(),
             SizedBox(
               width: double.infinity,
               height: 48.h,
@@ -151,7 +151,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 15.h),
+            Spacer(),
             Center(
               child: Text(
                 isRussian ? messagesRu['or'] ?? '' : messagesEn['or'] ?? '',
@@ -161,10 +161,10 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
+            Spacer(),
             SizedBox(
               width: double.infinity,
-              height: 50.h,
+              height: 46.h,
               child: ElevatedButton.icon(
                 icon: Image.asset('assets/images/google.png', height: 24.h),
                 label: Text(

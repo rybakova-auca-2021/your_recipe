@@ -19,6 +19,7 @@ class RecipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 0.15.sh,
       margin: EdgeInsets.symmetric(vertical: 8.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.r),
@@ -30,15 +31,14 @@ class RecipeCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.r),
             child: Image.network(
               imageUrl,
-              width: 140.w,
-              height: 90.h,
+              width: 0.45.sw,
               fit: BoxFit.cover,
             ),
           ),
           SizedBox(width: 16.w),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   title,
