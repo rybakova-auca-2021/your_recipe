@@ -32,13 +32,14 @@ class RecipeCard extends StatelessWidget {
             child: Image.network(
               imageUrl,
               width: 0.45.sw,
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
           SizedBox(width: 16.w),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
@@ -53,7 +54,7 @@ class RecipeCard extends StatelessWidget {
                     const Icon(Icons.timer_outlined, size: 20),
                     SizedBox(width: 4.h),
                     Text(
-                      '$prepTime min',
+                      '$prepTime',
                       style: TextStyle(fontSize: 14.sp),
                     ),
                   ],

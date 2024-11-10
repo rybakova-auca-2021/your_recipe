@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_recipe/core/colors.dart';
+import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_collections_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_popular_use_case.dart';
 import 'package:your_recipe/features/main/presentation/bloc/collection_bloc/collection_bloc.dart';
+import 'package:your_recipe/features/main/presentation/bloc/daily_recipe_bloc/daily_recipe_bloc.dart';
 import 'package:your_recipe/features/main/presentation/bloc/popular_recipes_bloc/popular_recipes_bloc.dart';
 import 'package:your_recipe/features/main/presentation/widgets/carousel_card.dart';
 import 'package:your_recipe/features/main/presentation/widgets/collection_card.dart';
@@ -30,6 +32,7 @@ class _MainScreenState extends State<MainScreen> {
   final _blocAllCollections = CollectionsBloc(GetIt.I<ViewCollectionsUseCase>());
   final _blocAllPopularRecipes = PopularRecipesBloc(GetIt.I<ViewPopularUseCase>());
   final _searchedRecipesBloc = SearchedRecipesBloc(GetIt.I<ViewSearchedRecipesUseCase>());
+  final _dailyRecipesBloc = RecipeOfTheDayBloc(GetIt.I<FetchRecipeOfTheDayUseCase>());
   final TextEditingController _searchController = TextEditingController();
   bool _isSearching = false;
 
@@ -38,6 +41,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     _loadCollections();
     _loadPopularRecipes();
+    _loadDailyRecipe();
     _searchController.addListener(_onSearchQueryChanged);
   }
 
@@ -58,6 +62,10 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _loadPopularRecipes() async {
     _blocAllPopularRecipes.add(const FetchPopularRecipesEvent('month'));
+  }
+
+  Future<void> _loadDailyRecipe() async {
+    _dailyRecipesBloc.add(FetchRecipeOfTheDayEvent());
   }
 
   @override
@@ -127,6 +135,38 @@ class _MainScreenState extends State<MainScreen> {
                   },
                 )
               else ...[
+                SizedBox(height: 20.h),
+                Column(
+                  mainAxisAlignment:MainAxisAlignment.start,
+                  crossAxisAlignment:CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Recipe of the day',
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    BlocBuilder<RecipeOfTheDayBloc, RecipeOfTheDayState>(
+                      bloc: _dailyRecipesBloc,
+                      builder: (context, state) {
+                        if (state is RecipeOfTheDayLoading) {
+                          return const Center(child: CircularProgressIndicator(color: AppColors.orange));
+                        } else if (state is RecipeOfTheDayLoaded) {
+                          return RecipeCard(
+                              imageUrl: state.recipe.imageUrl,
+                              title: state.recipe.name,
+                              prepTime: state.recipe.time,
+                              servings: state.recipe.numberOfPeople
+                          );
+                        } else {
+                          return const Center(child: Text('Failed to load recipe of the day'));
+                        }
+                      },
+                    ),
+                  ],
+                ),
                 SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -14,6 +14,7 @@ abstract class RecipeRemoteDataSource {
   Future<List<RecipeDetail>> collectionRecipes(int id);
   Future<FavoriteRecipe> saveRecipe(int id);
   Future<List<PopularRecipe>> fetchFavoriteRecipes();
+  Future<PopularRecipe> fetchRecipeOfTheDay();
 }
 
 class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
@@ -191,6 +192,26 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
       return data.map((item) => PopularRecipe.fromJson(item)).toList();
     } else {
       throw Exception('Failed to fetch favorite recipes');
+    }
+  }
+
+  @override
+  Future<PopularRecipe> fetchRecipeOfTheDay() async {
+    final accessToken = await _getAccessToken();
+
+    final response = await dio.get(
+      'https://ringtail-renewing-terminally.ngrok-free.app/chefmate/recipe/recipe-of-the-day/',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return PopularRecipe.fromJson(response.data);
+    } else {
+      throw Exception('Failed to fetch recipe of the day');
     }
   }
 }

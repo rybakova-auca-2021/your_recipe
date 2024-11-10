@@ -58,4 +58,10 @@ class RecipeRepositoryImpl implements RecipeRepository {
     final recipes = await remoteDataSource.saveRecipe(id);
     return recipes.toEntity();
   }
+
+  @override
+  Future<PopularRecipeEntity> fetchRecipeOfTheDay() async {
+    final recipe = await remoteDataSource.fetchRecipeOfTheDay();
+    return recipe.toEntity();
+  }
 }

@@ -5,6 +5,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:your_recipe/core/token_interceptor.dart';
+import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
 
 import '../features/auth/data/datasources/auth_remote_datasources.dart';
 import '../features/auth/data/repository/repository.dart';
@@ -152,4 +153,5 @@ Future<void> initDI() async {
   GetIt.I.registerLazySingleton<ViewRecipesInCollectionUseCase>(() => ViewRecipesInCollectionUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<FetchFavoritesUseCase>(() => FetchFavoritesUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<SaveRecipeUseCase>(() => SaveRecipeUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<FetchRecipeOfTheDayUseCase>(() => FetchRecipeOfTheDayUseCase(GetIt.I<RecipeRepository>()));
 }

@@ -32,11 +32,13 @@ import 'package:your_recipe/features/ingredients/presentation/bloc/delete_all_gr
 import 'package:your_recipe/features/ingredients/presentation/bloc/delete_grocery/delete_ingredient_bloc.dart';
 import 'package:your_recipe/features/ingredients/presentation/bloc/edit_grocery/edit_ingredient_bloc.dart';
 import 'package:your_recipe/features/ingredients/presentation/bloc/view_all_groceries/view_all_ingredients_bloc.dart';
+import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_collections_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_popular_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_recipe_detail_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_searched_recipes_use_case.dart';
 import 'package:your_recipe/features/main/presentation/bloc/collection_bloc/collection_bloc.dart';
+import 'package:your_recipe/features/main/presentation/bloc/daily_recipe_bloc/daily_recipe_bloc.dart';
 import 'package:your_recipe/features/main/presentation/bloc/detail_recipe_bloc/detail_recipe_bloc.dart';
 import 'package:your_recipe/features/main/presentation/bloc/filtered_recipes_bloc/filtered_recipe_bloc.dart';
 import 'package:your_recipe/features/main/presentation/bloc/popular_recipes_bloc/popular_recipes_bloc.dart';
@@ -229,6 +231,11 @@ class _RecipeAppState extends State<RecipeApp> {
               BlocProvider<RecipeFavoriteBloc>(
                 create: (context) => RecipeFavoriteBloc(
                   GetIt.I<SaveRecipeUseCase>(),
+                ),
+              ),
+              BlocProvider<RecipeOfTheDayBloc>(
+                create: (context) => RecipeOfTheDayBloc(
+                  GetIt.I<FetchRecipeOfTheDayUseCase>(),
                 ),
               ),
             ],
