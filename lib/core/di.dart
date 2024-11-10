@@ -24,8 +24,6 @@ import '../features/grocery/domain/usecase/delete_all_groceries_usecase.dart';
 import '../features/grocery/domain/usecase/delete_grocery_usecase.dart';
 import '../features/grocery/domain/usecase/edit_grocery_usecase.dart';
 import '../features/grocery/domain/usecase/view_groceries_usecase.dart';
-import '../features/grocery/presentation/bloc/edit_grocery/edit_grocery_bloc.dart';
-import '../features/grocery/presentation/bloc/view_all_groceries/view_all_groceries_bloc.dart';
 import '../features/ingredients/data/datasource/ingredient_remote_data_source.dart';
 import '../features/ingredients/data/repository/ingredient_repository_impl.dart';
 import '../features/ingredients/domain/repository/ingredient_repository.dart';
@@ -140,8 +138,6 @@ Future<void> initDI() async {
 
 
   GetIt.I.registerFactory<ProfileBloc>(() => ProfileBloc(GetIt.I<FetchProfileUsecase>()));
-  GetIt.I.registerFactory<ViewAllGroceriesBloc>(() => ViewAllGroceriesBloc(GetIt.I<ViewGroceriesUsecase>()));
-  GetIt.I.registerFactory<EditGroceryBloc>(() => EditGroceryBloc(GetIt.I<EditGroceryUsecase>(), GetIt.I<ViewAllGroceriesBloc>()));
   GetIt.I.registerFactory<ViewAllIngredientsBloc>(() => ViewAllIngredientsBloc(GetIt.I<ViewIngredientsUseCase>()));
 
 

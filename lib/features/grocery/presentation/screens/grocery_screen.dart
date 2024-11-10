@@ -5,13 +5,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:your_recipe/features/grocery/domain/entities/grocery_item_response_entity.dart';
+import 'package:your_recipe/features/grocery/domain/usecase/add_groceries_use_case.dart';
+import 'package:your_recipe/features/grocery/domain/usecase/add_grocery_usecase.dart';
+import 'package:your_recipe/features/grocery/domain/usecase/delete_grocery_usecase.dart';
+import 'package:your_recipe/features/grocery/domain/usecase/edit_grocery_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/view_groceries_usecase.dart';
-import 'package:your_recipe/features/grocery/presentation/bloc/add_grocery/add_grocery_bloc.dart';
-import 'package:your_recipe/features/grocery/presentation/bloc/view_all_groceries/view_all_groceries_bloc.dart';
+import 'package:your_recipe/features/grocery/presentation/bloc/grocery_bloc/grocery_bloc.dart';
 import 'package:your_recipe/features/grocery/presentation/widgets/grocery_item_tile.dart';
 import '../../../../core/colors.dart';
 import '../../../../core/csv_export.dart';
-import '../bloc/delete_all_groceries/delete_all_groceries_bloc.dart';
+import '../../domain/usecase/delete_all_groceries_usecase.dart';
 
 @RoutePage()
 class GroceryScreen extends StatefulWidget {
@@ -22,8 +25,13 @@ class GroceryScreen extends StatefulWidget {
 }
 
 class _GroceryListPageState extends State<GroceryScreen> {
-  final _blocAllGroceries = ViewAllGroceriesBloc(
-    GetIt.I<ViewGroceriesUsecase>(),
+  final _blocAllGroceries = GroceryBloc(
+    viewUsecase: GetIt.I<ViewGroceriesUsecase>(),
+    addUsecase: GetIt.I<AddGroceryUsecase>(),
+    addMultipleUsecase: GetIt.I<AddGroceriesUseCase>(),
+    deleteAllUsecase: GetIt.I<DeleteAllGroceriesUsecase>(),
+    deleteUsecase: GetIt.I<DeleteGroceryUsecase>(),
+    editUsecase: GetIt.I<EditGroceryUsecase>(),
   );
 
   bool _isSelectionMode = false;
@@ -93,7 +101,7 @@ class _GroceryListPageState extends State<GroceryScreen> {
             ),
             CupertinoDialogAction(
               onPressed: () {
-                context.read<AddGroceryBloc>().add(GroceryAdded(name: controller.text, quantity: "1"));
+                _blocAllGroceries.add(GroceryAdded(name: controller.text, quantity: "1"));
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -127,7 +135,7 @@ class _GroceryListPageState extends State<GroceryScreen> {
             CupertinoDialogAction(
               child: const Text('OK', style: TextStyle(color: AppColors.orange)),
               onPressed: () {
-                context.read<DeleteAllGroceriesBloc>().add(AllGroceriesDeleted());
+                _blocAllGroceries.add(AllGroceriesDeleted());
                 Navigator.of(context).pop();
                 setState(() {
                   _isSelectionMode = false;
@@ -171,10 +179,10 @@ class _GroceryListPageState extends State<GroceryScreen> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _loadGroceries,
-                child: BlocBuilder<ViewAllGroceriesBloc, ViewAllGroceriesState>(
+                child: BlocBuilder<GroceryBloc, GroceryState>(
                   bloc: _blocAllGroceries,
                   builder: (context, state) {
-                    if (state is ViewAllGroceriesLoading) {
+                    if (state is GroceryLoading) {
                       return const Center(
                         child: CircularProgressIndicator(color: Colors.orange),
                       );
@@ -210,7 +218,7 @@ class _GroceryListPageState extends State<GroceryScreen> {
                           );
                         },
                       );
-                    } else if (state is ViewAllGroceriesError) {
+                    } else if (state is GroceryError) {
                       return Center(
                         child: Text(
                           "Failed to load groceries",
@@ -221,7 +229,7 @@ class _GroceryListPageState extends State<GroceryScreen> {
 
                     return Container();
                   },
-                ),
+                )
               ),
             ),
             SizedBox(height: 16.h),

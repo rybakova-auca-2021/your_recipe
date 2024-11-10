@@ -17,11 +17,7 @@ import 'package:your_recipe/features/grocery/domain/usecase/delete_all_groceries
 import 'package:your_recipe/features/grocery/domain/usecase/delete_grocery_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/edit_grocery_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/view_groceries_usecase.dart';
-import 'package:your_recipe/features/grocery/presentation/bloc/add_grocery/add_grocery_bloc.dart';
-import 'package:your_recipe/features/grocery/presentation/bloc/delete_all_groceries/delete_all_groceries_bloc.dart';
-import 'package:your_recipe/features/grocery/presentation/bloc/delete_grocery/delete_grocery_bloc.dart';
-import 'package:your_recipe/features/grocery/presentation/bloc/edit_grocery/edit_grocery_bloc.dart';
-import 'package:your_recipe/features/grocery/presentation/bloc/view_all_groceries/view_all_groceries_bloc.dart';
+import 'package:your_recipe/features/grocery/presentation/bloc/grocery_bloc/grocery_bloc.dart';
 import 'package:your_recipe/features/ingredients/domain/usecase/add_ingredient_usecase.dart';
 import 'package:your_recipe/features/ingredients/domain/usecase/delete_all_ingredients_usecase.dart';
 import 'package:your_recipe/features/ingredients/domain/usecase/delete_ingredient_usecase.dart';
@@ -56,7 +52,6 @@ import 'features/auth/domain/usecases/send_code_usecase.dart';
 import 'features/auth/domain/usecases/set_password_usecase.dart';
 import 'features/auth/presentation/bloc/reset_password/reset_password_bloc.dart';
 import 'features/grocery/domain/usecase/add_groceries_use_case.dart';
-import 'features/grocery/presentation/bloc/add_groceries/add_groceries_bloc.dart';
 import 'features/main/domain/usecase/fetch_favorites_use_case.dart';
 import 'features/main/domain/usecase/save_recipe_use_case.dart';
 import 'features/main/domain/usecase/view_filtered_recipes_use_case.dart';
@@ -134,39 +129,14 @@ class _RecipeAppState extends State<RecipeApp> {
                   GetIt.I<UpdateProfileUseCase>(),
                 ),
               ),
-              BlocProvider<ViewAllGroceriesBloc>(
-                create: (context) => ViewAllGroceriesBloc(
-                  GetIt.I<ViewGroceriesUsecase>(),
-                ),
-              ),
-              BlocProvider<AddGroceryBloc>(
-                create: (context) => AddGroceryBloc(
-                  GetIt.I<AddGroceryUsecase>(),
-                  GetIt.I<ViewAllGroceriesBloc>(),
-                ),
-              ),
-              BlocProvider<AddGroceriesBloc>(
-                create: (context) => AddGroceriesBloc(
-                  GetIt.I<AddGroceriesUseCase>(),
-                  GetIt.I<ViewAllGroceriesBloc>(),
-                ),
-              ),
-              BlocProvider(
-                create: (context) => EditGroceryBloc(
-                  GetIt.I<EditGroceryUsecase>(),
-                  GetIt.I<ViewAllGroceriesBloc>(),
-                ),
-              ),
-              BlocProvider<DeleteGroceryBloc>(
-                create: (context) => DeleteGroceryBloc(
-                  GetIt.I<DeleteGroceryUsecase>(),
-                  GetIt.I<ViewAllGroceriesBloc>(),
-                ),
-              ),
-              BlocProvider<DeleteAllGroceriesBloc>(
-                create: (context) => DeleteAllGroceriesBloc(
-                  GetIt.I<DeleteAllGroceriesUsecase>(),
-                  GetIt.I<ViewAllGroceriesBloc>(),
+              BlocProvider<GroceryBloc>(
+                create: (context) => GroceryBloc(
+                  viewUsecase: GetIt.I<ViewGroceriesUsecase>(),
+                  addUsecase: GetIt.I<AddGroceryUsecase>(),
+                  addMultipleUsecase: GetIt.I<AddGroceriesUseCase>(),
+                  deleteAllUsecase: GetIt.I<DeleteAllGroceriesUsecase>(),
+                  deleteUsecase: GetIt.I<DeleteGroceryUsecase>(),
+                  editUsecase: GetIt.I<EditGroceryUsecase>(),
                 ),
               ),
               BlocProvider<ViewAllIngredientsBloc>(

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:your_recipe/features/grocery/presentation/bloc/grocery_bloc/grocery_bloc.dart';
 
 import '../../../../core/colors.dart';
 import '../../domain/entities/grocery_item_response_entity.dart';
-import '../bloc/delete_grocery/delete_grocery_bloc.dart';
-import '../bloc/edit_grocery/edit_grocery_bloc.dart';
 
 class GroceryItemTile extends StatefulWidget {
   final GroceryItemResponseEntity groceryItem;
@@ -37,7 +36,7 @@ class _GroceryItemTileState extends State<GroceryItemTile> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EditGroceryBloc, EditGroceryState>(
+    return BlocListener<GroceryBloc, GroceryState>(
       listener: (context, state) {
         if (state is EditGrocerySuccess && state.groceryItem.id == widget.groceryItem.id) {
           setState(() {
@@ -155,7 +154,7 @@ class _GroceryItemTileState extends State<GroceryItemTile> {
             CupertinoDialogAction(
               child: const Text('OK', style: TextStyle(color: AppColors.orange)),
               onPressed: () {
-                context.read<DeleteGroceryBloc>().add(GroceryDeleted(id: id));
+                context.read<GroceryBloc>().add(GroceryDeleted(id));
                 Navigator.of(context).pop(true);
               },
             ),
@@ -166,7 +165,7 @@ class _GroceryItemTileState extends State<GroceryItemTile> {
   }
 
   void _updateQuantity(BuildContext context, int newQuantity) {
-    context.read<EditGroceryBloc>().add(
+    context.read<GroceryBloc>().add(
       GroceryEdited(
         id: widget.groceryItem.id,
         name: widget.groceryItem.name,

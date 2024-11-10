@@ -36,7 +36,7 @@ class GroceryRemoteDataSourceImpl implements GroceryRemoteDataSource {
       ),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return GroceryItemResponse.fromJson(response.data);
     } else {
       throw Exception('Adding grocery failed');

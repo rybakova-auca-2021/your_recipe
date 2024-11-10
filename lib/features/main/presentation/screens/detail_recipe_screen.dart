@@ -9,7 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:your_recipe/core/colors.dart';
-import 'package:your_recipe/features/grocery/presentation/bloc/add_groceries/add_groceries_bloc.dart';
+import 'package:your_recipe/features/grocery/presentation/bloc/grocery_bloc/grocery_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_recipe_detail_use_case.dart';
 import 'package:your_recipe/features/main/presentation/bloc/detail_recipe_bloc/detail_recipe_bloc.dart';
 
@@ -242,7 +242,7 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
                                     })
                                         .whereType<GroceryItemEntity>()
                                         .toList();
-                                    context.read<AddGroceriesBloc>().add(GroceriesAdded(groceries: groceryItems));
+                                    context.read<GroceryBloc>().add(GroceriesAdded(groceryItems));
                                   });
                                 },
                                 label: const Text(
