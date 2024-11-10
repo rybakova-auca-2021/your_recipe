@@ -2,25 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:your_recipe/core/colors.dart';
-import 'package:your_recipe/features/ingredients/presentation/bloc/add_ingredient/add_ingredient_bloc.dart';
-import 'package:your_recipe/features/ingredients/presentation/bloc/edit_grocery/edit_ingredient_bloc.dart';
+import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 import 'package:your_recipe/features/ingredients/presentation/widget/category_dialog.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/entity/ingredient.dart';
-import '../bloc/view_all_groceries/view_all_ingredients_bloc.dart';
 import 'date_picker_dialog.dart';
 
 class AddIngredientBottomSheet extends StatefulWidget {
   final String mode;
   final Ingredient? ingredient;
   final String category;
+  final Function(Ingredient) onSave;
 
   const AddIngredientBottomSheet({
-    Key? key,
+    super.key,
     required this.mode,
     this.ingredient,
-    required this.category
-  }) : super(key: key);
+    required this.category,
+    required this.onSave
+  });
 
   @override
   _AddIngredientBottomSheetState createState() => _AddIngredientBottomSheetState();
@@ -72,13 +73,15 @@ class _AddIngredientBottomSheetState extends State<AddIngredientBottomSheet> {
         return DatePickerBottomSheet(
           initialDate: DateTime.now(),
           onDateSelected: (DateTime selectedDate) {
-            controller.text = "${selectedDate.toLocal()}".split(' ')[0];
+            final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+            controller.text = formattedDate;
             setState(() {});
           },
         );
       },
     );
   }
+
 
   void _selectCategory() {
     showModalBottomSheet(
@@ -220,34 +223,22 @@ class _AddIngredientBottomSheetState extends State<AddIngredientBottomSheet> {
             width: double.infinity,
             height: 40.h,
             child: ElevatedButton.icon(
-                onPressed: _areFieldsFilled()
-                    ? () {
-                  if (isEditMode) {
-                    context.read<EditIngredientBloc>().add(
-                      IngredientEdited(
-                        name: _nameController.text,
-                        quantity: _quantityController.text,
-                        manufactureDate: _manufactureDateController.text,
-                        expirationDate: _expirationDateController.text,
-                        category: _selectedCategory!,
-                      ),
-                    );
-                  } else {
-                    context.read<AddIngredientBloc>().add(
-                      IngredientAdded(
-                        name: _nameController.text,
-                        quantity: _quantityController.text,
-                        manufactureDate: _manufactureDateController.text,
-                        expirationDate: _expirationDateController.text,
-                        category: _selectedCategory!,
-                      ),
-                    );
-                    context.read<ViewAllIngredientsBloc>().add(AllIngredientsViewed(category: widget.category));
-                  }
-                  Navigator.pop(context);
-                  _clearFields();
-                }
-                    : null,
+              onPressed: _areFieldsFilled()
+                  ? () {
+                final ingredient = Ingredient(
+                  id: widget.ingredient?.id,
+                  name: _nameController.text,
+                  quantity: _quantityController.text,
+                  manufactureDate: _manufactureDateController.text,
+                  expirationDate: _expirationDateController.text,
+                  category: _selectedCategory!,
+                );
+
+                widget.onSave(ingredient);
+                _clearFields();
+                Navigator.pop(context);
+              }
+                  : null,
               label: Text(
                 isEditMode ? 'Edit' : 'Add',
                 style: const TextStyle(color: Colors.white),

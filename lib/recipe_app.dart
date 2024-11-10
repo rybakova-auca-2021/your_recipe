@@ -23,11 +23,7 @@ import 'package:your_recipe/features/ingredients/domain/usecase/delete_all_ingre
 import 'package:your_recipe/features/ingredients/domain/usecase/delete_ingredient_usecase.dart';
 import 'package:your_recipe/features/ingredients/domain/usecase/edit_ingredient_usecase.dart';
 import 'package:your_recipe/features/ingredients/domain/usecase/view_ingredients_usecase.dart';
-import 'package:your_recipe/features/ingredients/presentation/bloc/add_ingredient/add_ingredient_bloc.dart';
-import 'package:your_recipe/features/ingredients/presentation/bloc/delete_all_groceries/delete_all_ingredients_bloc.dart';
-import 'package:your_recipe/features/ingredients/presentation/bloc/delete_grocery/delete_ingredient_bloc.dart';
-import 'package:your_recipe/features/ingredients/presentation/bloc/edit_grocery/edit_ingredient_bloc.dart';
-import 'package:your_recipe/features/ingredients/presentation/bloc/view_all_groceries/view_all_ingredients_bloc.dart';
+import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_collections_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_popular_use_case.dart';
@@ -139,33 +135,13 @@ class _RecipeAppState extends State<RecipeApp> {
                   editUsecase: GetIt.I<EditGroceryUsecase>(),
                 ),
               ),
-              BlocProvider<ViewAllIngredientsBloc>(
-                create: (context) => ViewAllIngredientsBloc(
-                  GetIt.I<ViewIngredientsUseCase>(),
-                ),
-              ),
-              BlocProvider<AddIngredientBloc>(
-                create: (context) => AddIngredientBloc(
-                  GetIt.I<AddIngredientUseCase>(),
-                  GetIt.I<ViewAllIngredientsBloc>(),
-                ),
-              ),
-              BlocProvider(
-                create: (context) => EditIngredientBloc(
-                  GetIt.I<EditIngredientUseCase>(),
-                  GetIt.I<ViewAllIngredientsBloc>(),
-                ),
-              ),
-              BlocProvider<DeleteIngredientBloc>(
-                create: (context) => DeleteIngredientBloc(
-                  GetIt.I<DeleteIngredientUseCase>(),
-                  GetIt.I<ViewAllIngredientsBloc>(),
-                ),
-              ),
-              BlocProvider<DeleteAllIngredientsBloc>(
-                create: (context) => DeleteAllIngredientsBloc(
-                  GetIt.I<DeleteAllIngredientsUseCase>(),
-                  GetIt.I<ViewAllIngredientsBloc>(),
+              BlocProvider<IngredientBloc>(
+                create: (context) => IngredientBloc(
+                  addUseCase: GetIt.I<AddIngredientUseCase>(),
+                  deleteAllUseCase: GetIt.I<DeleteAllIngredientsUseCase>(),
+                  deleteUseCase: GetIt.I<DeleteIngredientUseCase>(),
+                  editUseCase: GetIt.I<EditIngredientUseCase>(),
+                  viewUseCase: GetIt.I<ViewIngredientsUseCase>(),
                 ),
               ),
               BlocProvider<CollectionsBloc>(

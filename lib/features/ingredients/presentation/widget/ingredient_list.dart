@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:your_recipe/core/colors.dart';
-import 'package:your_recipe/features/ingredients/presentation/bloc/delete_grocery/delete_ingredient_bloc.dart';
+import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 
 import '../../domain/entity/ingredient.dart';
-import '../bloc/view_all_groceries/view_all_ingredients_bloc.dart';
 import 'add_ingredient_dialog.dart';
 import 'ingredients_detail_dialog.dart';
 
@@ -20,15 +20,17 @@ class IngredientsListView extends StatefulWidget {
 }
 
 class _IngredientsListViewState extends State<IngredientsListView> {
+  late IngredientBloc _blocIngredient;
 
   @override
   void initState() {
     super.initState();
-    _loadIngredients(widget.category);
+    _blocIngredient = context.read<IngredientBloc>();
+    _loadIngredients();
   }
 
-  Future<void> _loadIngredients(String category) async {
-    context.read<ViewAllIngredientsBloc>().add(AllIngredientsViewed(category: category));
+  Future<void> _loadIngredients() async {
+    _blocIngredient.add(ViewAllIngredients(category: widget.category));
   }
 
   Widget slideLeftBackground() {
@@ -94,10 +96,9 @@ class _IngredientsListViewState extends State<IngredientsListView> {
             CupertinoDialogAction(
               child: const Text('OK', style: TextStyle(color: AppColors.orange)),
               onPressed: () {
-                context.read<DeleteIngredientBloc>().add(
-                    IngredientDeleted(id: id, category: widget.category)
+               _blocIngredient.add(
+                    DeleteIngredient(id: id, category: widget.category)
                 );
-                context.read<ViewAllIngredientsBloc>().add(AllIngredientsViewed(category: widget.category));
                 Navigator.of(context).pop();
               },
             ),
@@ -139,7 +140,25 @@ class _IngredientsListViewState extends State<IngredientsListView> {
           builder: (BuildContext context, ScrollController scrollController) {
             return SingleChildScrollView(
               controller: scrollController,
-              child: AddIngredientBottomSheet(mode: "edit", ingredient: ingredient, category: widget.category),
+              child: AddIngredientBottomSheet(
+                mode: "edit",
+                ingredient: ingredient,
+                category: widget.category,
+                onSave: (Ingredient ingredient) {
+                  final formattedManufactureDate = DateFormat('yyyy-MM-dd').format(DateFormat('dd.MM.yyyy').parse(ingredient.manufactureDate ?? ''));
+                  final formattedExpirationDate = DateFormat('yyyy-MM-dd').format(DateFormat('dd.MM.yyyy').parse(ingredient.expirationDate ?? ''));
+                  _blocIngredient.add(
+                      EditIngredient(
+                          id: ingredient.id,
+                          name: ingredient.name,
+                          quantity: ingredient.quantity,
+                          manufactureDate: formattedManufactureDate,
+                          expirationDate: formattedExpirationDate,
+                          category: ingredient.category
+                      )
+                  );
+                },
+              ),
             );
           },
         );
@@ -149,24 +168,15 @@ class _IngredientsListViewState extends State<IngredientsListView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ViewAllIngredientsBloc, ViewAllIngredientsState>(
-      listener: (context, state) {
-        if (state is ViewAllIngredientsSuccess) {
-
-        }
-        if (state is ViewAllIngredientsError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        }
-      },
-      child: BlocBuilder<ViewAllIngredientsBloc, ViewAllIngredientsState>(
+    return BlocProvider.value(
+      value: _blocIngredient,
+      child: BlocBuilder<IngredientBloc, IngredientState>(
         builder: (context, state) {
-          if (state is ViewAllIngredientsLoading) {
+          if (state is IngredientLoading) {
             return const Center(child: CircularProgressIndicator(color: Colors.orange));
-          } else if (state is ViewAllIngredientsError) {
+          } else if (state is IngredientError) {
             return Center(child: Text(state.message));
-          } else if (state is ViewAllIngredientsSuccess) {
+          } else if (state is IngredientViewSuccess) {
             final ingredients = state.ingredients;
 
             if (ingredients.isEmpty) {
@@ -245,7 +255,6 @@ class _IngredientsListViewState extends State<IngredientsListView> {
 String _getExpirationStatus(String? manufactureDateStr, String? expirationDateStr) {
   if (manufactureDateStr == null || expirationDateStr == null) return 'Date unavailable';
 
-  // Parse dates with custom format DD.MM.YYYY
   DateTime? manufactureDate = _parseDate(manufactureDateStr);
   DateTime? expirationDate = _parseDate(expirationDateStr);
 

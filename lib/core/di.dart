@@ -5,6 +5,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:your_recipe/core/token_interceptor.dart';
+import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
 
 import '../features/auth/data/datasources/auth_remote_datasources.dart';
@@ -32,7 +33,6 @@ import '../features/ingredients/domain/usecase/delete_all_ingredients_usecase.da
 import '../features/ingredients/domain/usecase/delete_ingredient_usecase.dart';
 import '../features/ingredients/domain/usecase/edit_ingredient_usecase.dart';
 import '../features/ingredients/domain/usecase/view_ingredients_usecase.dart';
-import '../features/ingredients/presentation/bloc/view_all_groceries/view_all_ingredients_bloc.dart';
 import '../features/main/data/datasource/recipe_remote_data_source.dart';
 import '../features/main/data/repository/recipe_repository_impl.dart';
 import '../features/main/domain/repository/recipe_repository.dart';
@@ -138,8 +138,6 @@ Future<void> initDI() async {
 
 
   GetIt.I.registerFactory<ProfileBloc>(() => ProfileBloc(GetIt.I<FetchProfileUsecase>()));
-  GetIt.I.registerFactory<ViewAllIngredientsBloc>(() => ViewAllIngredientsBloc(GetIt.I<ViewIngredientsUseCase>()));
-
 
   GetIt.I.registerLazySingleton<ViewPopularUseCase>(() => ViewPopularUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<ViewCollectionsUseCase>(() => ViewCollectionsUseCase(GetIt.I<RecipeRepository>()));
