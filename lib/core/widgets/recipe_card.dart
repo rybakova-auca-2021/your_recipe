@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:your_recipe/core/colors.dart';
 
 class RecipeCard extends StatelessWidget {
@@ -28,11 +30,22 @@ class RecipeCard extends StatelessWidget {
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: Image.network(
-              imageUrl,
+            borderRadius: BorderRadius.circular(16.r),
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
               width: 0.45.sw,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: Colors.grey.shade500,
+                highlightColor: Colors.grey.shade200,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
           SizedBox(width: 16.w),

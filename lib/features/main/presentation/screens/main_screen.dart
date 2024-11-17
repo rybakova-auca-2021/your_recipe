@@ -82,205 +82,225 @@ class _MainScreenState extends State<MainScreen> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.r),
-          child: Column(
-            children: [
-              TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.lightGrey,
-                  hintText: 'Search',
-                  prefixIcon: Icon(Icons.search, size: 24.r),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.filter_list),
-                    onPressed: () {
-                      AutoRouter.of(context).push(const FilterRoute());
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16.r),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              if (_isSearching)
-                BlocBuilder<SearchedRecipesBloc, SearchedRecipesState>(
-                  bloc: _searchedRecipesBloc,
-                  builder: (context, state) {
-                    if (state is SearchedRecipesLoading) {
-                      return const Center(child: CircularProgressIndicator(color: AppColors.orange));
-                    } else if (state is SearchedRecipesLoaded) {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: state.recipes.length,
-                        itemBuilder: (context, index) {
-                          final recipe = state.recipes[index];
-                          return RecipeCard(
-                            imageUrl: recipe.imageUrl,
-                            title: recipe.name,
-                            prepTime: recipe.time,
-                            servings: recipe.numberOfPeople,
-                          );
-                        },
-                      );
-                    } else if (state is SearchedRecipesError) {
-                      return Center(child: Text('Failed to load recipes'));
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                )
-              else ...[
-                SizedBox(height: 20.h),
-                Column(
-                  mainAxisAlignment:MainAxisAlignment.start,
-                  crossAxisAlignment:CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Recipe of the day',
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    BlocBuilder<RecipeOfTheDayBloc, RecipeOfTheDayState>(
-                      bloc: _dailyRecipesBloc,
-                      builder: (context, state) {
-                        if (state is RecipeOfTheDayLoading) {
-                          return const Center(child: CircularProgressIndicator(color: AppColors.orange));
-                        } else if (state is RecipeOfTheDayLoaded) {
-                          return RecipeCard(
-                              imageUrl: state.recipe.imageUrl,
-                              title: state.recipe.name,
-                              prepTime: state.recipe.time,
-                              servings: state.recipe.numberOfPeople
-                          );
-                        } else {
-                          return const Center(child: Text('Failed to load recipe of the day'));
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Most popular',
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        AutoRouter.of(context).push(const PopularRoute());
-                      },
-                      child: const Text(
-                        'See all',
-                        style: TextStyle(color: Colors.orange),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                BlocBuilder<PopularRecipesBloc, PopularRecipesState>(
-                  bloc: _blocAllPopularRecipes,
-                  builder: (context, state) {
-                    if (state is PopularRecipesLoading) {
-                      return const Center(child: CircularProgressIndicator(color: AppColors.orange));
-                    } else if (state is PopularRecipesLoaded) {
-                      return CarouselSlider(
-                        options: CarouselOptions(
-                          height: 250.h,
-                          enableInfiniteScroll: true,
-                          autoPlay: false,
-                          enlargeCenterPage: true,
-                          viewportFraction: 0.6,
-                        ),
-                        items: state.recipes.map((recipe) {
-                          return GestureDetector(
-                            onTap: () {
-                              AutoRouter.of(context).push(DetailRecipeRoute(id: recipe.id));
-                            },
-                            child: CarouselCard(
-                              title: recipe.name,
-                              time: recipe.time,
-                              servings: recipe.numberOfPeople,
-                              imageUrl: recipe.imageUrl,
-                            ),
-                          );
-                        }).toList(),
-                      );
+      body: BlocBuilder<CollectionsBloc, CollectionsState>(
+        bloc: _blocAllCollections,
+        builder: (context, collectionsState) {
+          return BlocBuilder<PopularRecipesBloc, PopularRecipesState>(
+            bloc: _blocAllPopularRecipes,
+            builder: (context, popularState) {
+              return BlocBuilder<RecipeOfTheDayBloc, RecipeOfTheDayState>(
+                bloc: _dailyRecipesBloc,
+                builder: (context, dailyRecipeState) {
+                  final isLoading =
+                      collectionsState is CollectionsLoading ||
+                          popularState is PopularRecipesLoading ||
+                          dailyRecipeState is RecipeOfTheDayLoading;
 
-                    } else {
-                      return const Center(child: Text('Failed to load popular recipes'));
-                    }
-                  },
-                ),
-                SizedBox(height: 16.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Curated Collections',
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
+                  final hasError =
+                      collectionsState is CollectionsError ||
+                          popularState is PopularRecipesError ||
+                          dailyRecipeState is RecipeOfTheDayError;
+
+                  if (isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(color: AppColors.orange),
+                    );
+                  }
+
+                  if (hasError) {
+                    return Center(
+                      child: Text(
+                        'Failed to load data. Please try again.',
+                        style: TextStyle(color: Colors.red, fontSize: 16.sp),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        AutoRouter.of(context).push(const CollectionRoute());
-                      },
-                      child: const Text(
-                        'See all',
-                        style: TextStyle(color: Colors.orange),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-                BlocBuilder<CollectionsBloc, CollectionsState>(
-                  bloc: _blocAllCollections,
-                  builder: (context, state) {
-                    if (state is CollectionsLoading) {
-                      return const Center(child: CircularProgressIndicator(color: AppColors.orange));
-                    } else if (state is CollectionsLoaded) {
-                      return SizedBox(
-                        height: 220.h,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: state.collections.map((collection) {
-                            return GestureDetector(
-                              onTap: () {
-                                AutoRouter.of(context).push(DetailCollectionRoute(id: collection.id, title: collection.title));
-                              },
-                              child: CollectionCard(
-                                title: collection.title,
-                                imageUrl: collection.imageUrl,
+                    );
+                  }
+
+                  if (collectionsState is CollectionsLoaded &&
+                      popularState is PopularRecipesLoaded &&
+                      dailyRecipeState is RecipeOfTheDayLoaded) {
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.r),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: AppColors.lightGrey,
+                                hintText: 'Search',
+                                prefixIcon: Icon(Icons.search, size: 24.r),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.filter_list),
+                                  onPressed: () {
+                                    AutoRouter.of(context).push(const FilterRoute());
+                                  },
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  borderSide: BorderSide.none,
+                                ),
                               ),
-                            );
-                          }).toList(),
+                            ),
+
+                            BlocBuilder<SearchedRecipesBloc, SearchedRecipesState>(
+                              bloc: _searchedRecipesBloc,
+                              builder: (context, searchState) {
+                                if (_isSearching) {
+                                  if (searchState is SearchedRecipesLoading) {
+                                  
+                                  } else if (searchState is SearchedRecipesLoaded) {
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: searchState.recipes.length,
+                                      itemBuilder: (context, index) {
+                                        final recipe = searchState.recipes[index];
+                                        return RecipeCard(
+                                          imageUrl: recipe.imageUrl,
+                                          title: recipe.name,
+                                          prepTime: recipe.time,
+                                          servings: recipe.numberOfPeople,
+                                        );
+                                      },
+                                    );
+                                  } else if (searchState is SearchedRecipesError) {
+                                    return const Center(child: Text('Failed to load search results'));
+                                  }
+                                }
+                                return const SizedBox.shrink();
+                              },
+                            ),
+
+                            if (!_isSearching) ...[
+                              SizedBox(height: 20.h),
+                              Center(
+                                child: Text(
+                                  'Recipe of the day',
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  AutoRouter.of(context).push(DetailRecipeRoute(id: dailyRecipeState.recipe.id));
+                                },
+                                child: RecipeCard(
+                                  imageUrl: dailyRecipeState.recipe.imageUrl,
+                                  title: dailyRecipeState.recipe.name,
+                                  prepTime: dailyRecipeState.recipe.time,
+                                  servings: dailyRecipeState.recipe.numberOfPeople,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Most popular',
+                                    style: TextStyle(
+                                      color: Colors.orange,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      AutoRouter.of(context).push(const PopularRoute());
+                                    },
+                                    child: const Text(
+                                      'See all',
+                                      style: TextStyle(color: Colors.orange),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              CarouselSlider(
+                                options: CarouselOptions(
+                                  height: 250.h,
+                                  enableInfiniteScroll: true,
+                                  autoPlay: false,
+                                  enlargeCenterPage: true,
+                                  viewportFraction: 0.6,
+                                ),
+                                items: popularState.recipes.map((recipe) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      AutoRouter.of(context).push(DetailRecipeRoute(id: recipe.id));
+                                    },
+                                    child: CarouselCard(
+                                      title: recipe.name,
+                                      time: recipe.time,
+                                      servings: recipe.numberOfPeople,
+                                      imageUrl: recipe.imageUrl,
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                              SizedBox(height: 16.h),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Curated Collections',
+                                    style: TextStyle(
+                                      color: Colors.orange,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      AutoRouter.of(context).push(const CollectionRoute());
+                                    },
+                                    child: const Text(
+                                      'See all',
+                                      style: TextStyle(color: Colors.orange),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16.h),
+                              SizedBox(
+                                height: 220.h,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: collectionsState.collections.map((collection) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        AutoRouter.of(context).push(
+                                          DetailCollectionRoute(
+                                            id: collection.id,
+                                            title: collection.title,
+                                          ),
+                                        );
+                                      },
+                                      child: CollectionCard(
+                                        title: collection.title,
+                                        imageUrl: collection.imageUrl,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
-                      );
-                    } else {
-                      return const Center(child: Text('Failed to load collections'));
-                    }
-                  },
-                ),
-              ],
-            ],
-          ),
-        ),
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }

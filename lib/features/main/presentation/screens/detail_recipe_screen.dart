@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:auto_route/annotations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:your_recipe/core/colors.dart';
 import 'package:your_recipe/features/grocery/presentation/bloc/grocery_bloc/grocery_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/view_recipe_detail_use_case.dart';
@@ -124,12 +126,23 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
                             height: 300.h,
                             width: double.infinity,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.network(
-                                detailRecipe.imageUrl,
+                              borderRadius: BorderRadius.circular(20.r),
+                              child: CachedNetworkImage(
+                                imageUrl: detailRecipe.imageUrl,
                                 fit: BoxFit.cover,
+                                placeholder: (context, url) => Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade500,
+                                  highlightColor: Colors.grey.shade200,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(16.r),
+                                    ),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => const Icon(Icons.error),
                               ),
-                            ),
+                            )
                           ),
                           SizedBox(height: 20.h),
                           Text(

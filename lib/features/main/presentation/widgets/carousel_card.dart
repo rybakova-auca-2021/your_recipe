@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:your_recipe/core/colors.dart';
 
 class CarouselCard extends StatelessWidget {
@@ -32,12 +34,23 @@ class CarouselCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(10.r),
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.fitWidth,
+                borderRadius: BorderRadius.circular(16.r),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
                   width: 200.w,
                   height: 110.h,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.grey.shade500,
+                    highlightColor: Colors.grey.shade200,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
               SizedBox(height: 12.h),
