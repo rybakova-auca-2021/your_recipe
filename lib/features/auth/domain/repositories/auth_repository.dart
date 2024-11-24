@@ -8,7 +8,7 @@ import '../usecases/reset_password_usecase.dart';
 
 abstract class AuthRepository {
   Future<LoginResponseEntity> login(LoginEntity loginEntity);
-  Future<void> register(RegisterEntity registerEntity);
+  Future<LoginResponseEntity> register(RegisterEntity registerEntity);
   Future<PasswordResetResponseEntity> resetPassword(PasswordResetEntity passwordResetEntity);
   Future<void> sendCode(SendCodeEntity sendCodeEntity);
   Future<void> setPassword(PasswordSetEntity passwordSetEntity);

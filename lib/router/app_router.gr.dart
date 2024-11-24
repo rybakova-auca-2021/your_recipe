@@ -296,6 +296,25 @@ class FilterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [FoodPreferenceScreen]
+class FoodPreferenceRoute extends PageRouteInfo<void> {
+  const FoodPreferenceRoute({List<PageRouteInfo>? children})
+      : super(
+          FoodPreferenceRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'FoodPreferenceRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const FoodPreferenceScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ForgotPasswordScreen]
 class ForgotPasswordRoute extends PageRouteInfo<void> {
   const ForgotPasswordRoute({List<PageRouteInfo>? children})
@@ -443,6 +462,25 @@ class PopularRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const PopularScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [PreferencesScreen]
+class PreferencesRoute extends PageRouteInfo<void> {
+  const PreferencesRoute({List<PageRouteInfo>? children})
+      : super(
+          PreferencesRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PreferencesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PreferencesScreen();
     },
   );
 }

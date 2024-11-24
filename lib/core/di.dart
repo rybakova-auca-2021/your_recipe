@@ -7,6 +7,7 @@ import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:your_recipe/core/token_interceptor.dart';
 import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
+import 'package:your_recipe/features/preferences/data/datasources/preference_remote_data_source.dart';
 
 import '../features/auth/data/datasources/auth_remote_datasources.dart';
 import '../features/auth/data/repository/repository.dart';
@@ -44,6 +45,14 @@ import '../features/main/domain/usecase/view_popular_use_case.dart';
 import '../features/main/domain/usecase/view_recipe_detail_use_case.dart';
 import '../features/main/domain/usecase/view_recipes_in_collection_use_case.dart';
 import '../features/main/domain/usecase/view_searched_recipes_use_case.dart';
+import '../features/preferences/data/repository/preference_repository_impl.dart';
+import '../features/preferences/domain/repositories/preference_repository.dart';
+import '../features/preferences/domain/usecases/add_preferred_cuisine_use_case.dart';
+import '../features/preferences/domain/usecases/add_preferred_food_use_case.dart';
+import '../features/preferences/domain/usecases/fetch_cuisine_use_case.dart';
+import '../features/preferences/domain/usecases/fetch_food_use_case.dart';
+import '../features/preferences/domain/usecases/get_preferred_cuisine_use_case.dart';
+import '../features/preferences/domain/usecases/get_preferred_food_use_case.dart';
 import '../features/profile/data/datasources/profile_remote_data_source.dart';
 import '../features/profile/data/repository/profile_repository.dart';
 import '../features/profile/domain/repositories/profile_repository.dart';
@@ -115,6 +124,14 @@ Future<void> initDI() async {
         () => RecipeRepositoryImpl(remoteDataSource: GetIt.I<RecipeRemoteDataSource>()),
   );
 
+  GetIt.I.registerLazySingleton<PreferenceRemoteDataSource>(
+        () => PreferenceRemoteDataSourceImpl(dio: dio),
+  );
+  GetIt.I.registerLazySingleton<PreferenceRepository>(
+        () => PreferenceRepositoryImpl(remoteDataSource: GetIt.I<PreferenceRemoteDataSource>()),
+  );
+
+
   GetIt.I.registerLazySingleton<LoginUseCase>(() => LoginUseCase(GetIt.I<AuthRepository>()));
   GetIt.I.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(GetIt.I<AuthRepository>()));
   GetIt.I.registerLazySingleton<ResetPasswordUseCase>(() => ResetPasswordUseCase(GetIt.I<AuthRepository>()));
@@ -148,4 +165,11 @@ Future<void> initDI() async {
   GetIt.I.registerLazySingleton<FetchFavoritesUseCase>(() => FetchFavoritesUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<SaveRecipeUseCase>(() => SaveRecipeUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<FetchRecipeOfTheDayUseCase>(() => FetchRecipeOfTheDayUseCase(GetIt.I<RecipeRepository>()));
+
+  getIt.registerLazySingleton<AddPreferredCuisineUseCase>(() => AddPreferredCuisineUseCase(repository: GetIt.I<PreferenceRepository>()));
+  getIt.registerLazySingleton<AddPreferredFoodUseCase>(() => AddPreferredFoodUseCase(repository: getIt<PreferenceRepository>()));
+  getIt.registerLazySingleton<FetchCuisineUseCase>(() => FetchCuisineUseCase(repository: getIt<PreferenceRepository>()),);
+  getIt.registerLazySingleton<FetchFoodUseCase>(() => FetchFoodUseCase(repository: getIt<PreferenceRepository>()),);
+  getIt.registerLazySingleton<GetPreferredCuisineUseCase>(() => GetPreferredCuisineUseCase(repository: getIt<PreferenceRepository>()),);
+  getIt.registerLazySingleton<GetPreferredFoodUseCase>(() => GetPreferredFoodUseCase(repository: getIt<PreferenceRepository>()),);
 }

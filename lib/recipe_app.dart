@@ -52,6 +52,18 @@ import 'features/main/domain/usecase/fetch_favorites_use_case.dart';
 import 'features/main/domain/usecase/save_recipe_use_case.dart';
 import 'features/main/domain/usecase/view_filtered_recipes_use_case.dart';
 import 'features/main/presentation/bloc/save_recipe_bloc/save_recipe_bloc.dart';
+import 'features/preferences/domain/usecases/add_preferred_cuisine_use_case.dart';
+import 'features/preferences/domain/usecases/add_preferred_food_use_case.dart';
+import 'features/preferences/domain/usecases/fetch_cuisine_use_case.dart';
+import 'features/preferences/domain/usecases/fetch_food_use_case.dart';
+import 'features/preferences/domain/usecases/get_preferred_cuisine_use_case.dart';
+import 'features/preferences/domain/usecases/get_preferred_food_use_case.dart';
+import 'features/preferences/presentation/bloc/add_cuisine_bloc/add_cuisine_bloc.dart';
+import 'features/preferences/presentation/bloc/add_food_bloc/add_food_bloc.dart';
+import 'features/preferences/presentation/bloc/fetch_cuisine_bloc/fetch_cuisine_bloc.dart';
+import 'features/preferences/presentation/bloc/fetch_food_bloc/fetch_food_bloc.dart';
+import 'features/preferences/presentation/bloc/get_preferred_cuisine_bloc/get_preferred_cuisine_bloc.dart';
+import 'features/preferences/presentation/bloc/get_preferred_food_bloc/get_preferred_food_bloc.dart';
 import 'features/profile/presentation/bloc/fetch_favorite_bloc/fetch_favorite_bloc.dart';
 
 class RecipeApp extends StatefulWidget {
@@ -182,6 +194,36 @@ class _RecipeAppState extends State<RecipeApp> {
               BlocProvider<RecipeOfTheDayBloc>(
                 create: (context) => RecipeOfTheDayBloc(
                   GetIt.I<FetchRecipeOfTheDayUseCase>(),
+                ),
+              ),
+              BlocProvider<AddPreferredCuisineBloc>(
+                create: (context) => AddPreferredCuisineBloc(
+                  addPreferredCuisineUseCase: GetIt.I<AddPreferredCuisineUseCase>(),
+                ),
+              ),
+              BlocProvider<AddPreferredFoodBloc>(
+                create: (context) => AddPreferredFoodBloc(
+                  addPreferredFoodUseCase: GetIt.I<AddPreferredFoodUseCase>(),
+                ),
+              ),
+              BlocProvider<FetchCuisineBloc>(
+                create: (context) => FetchCuisineBloc(
+                  fetchCuisineUseCase: GetIt.I<FetchCuisineUseCase>(),
+                ),
+              ),
+              BlocProvider<FetchFoodBloc>(
+                create: (context) => FetchFoodBloc(
+                  fetchFoodUseCase: GetIt.I<FetchFoodUseCase>(),
+                ),
+              ),
+              BlocProvider<GetPreferredCuisineBloc>(
+                create: (context) => GetPreferredCuisineBloc(
+                  getPreferredCuisineUseCase: GetIt.I<GetPreferredCuisineUseCase>(),
+                ),
+              ),
+              BlocProvider<GetPreferredFoodBloc>(
+                create: (context) => GetPreferredFoodBloc(
+                  getPreferredFoodUseCase: GetIt.I<GetPreferredFoodUseCase>(),
                 ),
               ),
             ],

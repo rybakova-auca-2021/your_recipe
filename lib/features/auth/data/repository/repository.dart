@@ -34,13 +34,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> register(RegisterEntity registerEntity) async {
+  Future<LoginResponseEntity> register(RegisterEntity registerEntity) async {
     final registerModel = RegisterModel(
       email: registerEntity.email,
       password: registerEntity.password,
       confirmPassword: registerEntity.confirmPassword,
     );
-    await remoteDataSource.register(registerModel);
+    final registerResponseModel = await remoteDataSource.register(registerModel);
+    return LoginResponseEntity(
+      userId: registerResponseModel.userId,
+      accessToken: registerResponseModel.accessToken,
+      refreshToken: registerResponseModel.refreshToken,
+    );
   }
 
   @override

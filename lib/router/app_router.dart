@@ -17,6 +17,8 @@ import '../features/main/presentation/screens/collection_screen.dart';
 import '../features/main/presentation/screens/recipe_filter_screen.dart';
 import '../features/main/presentation/screens/detail_collection_screen.dart';
 import '../features/onboard/screens/onboard_screen.dart';
+import '../features/preferences/presentation/pages/food_preference_screen.dart';
+import '../features/preferences/presentation/pages/preferences_screen.dart';
 import '../features/profile/presentation/pages/add_meal_plan_screen.dart';
 import '../features/profile/presentation/pages/edit_profile_screen.dart';
 import '../features/profile/presentation/pages/favorites_screen.dart';
@@ -36,6 +38,9 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ForgotPasswordRoute.page),
     AutoRoute(page: CodeVerificationRoute.page),
     AutoRoute(page: UpdatePasswordRoute.page),
+    AutoRoute(page: PreferencesRoute.page),
+    AutoRoute(page: FoodPreferenceRoute.page),
+
     AutoRoute(page: MainRoute.page),
     AutoRoute(page: BottomNavRoute.page),
     AutoRoute(page: NotificationsRoute.page),

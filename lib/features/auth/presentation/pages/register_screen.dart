@@ -220,7 +220,7 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     );
                   } else if (state is RegisterSuccess) {
-                    AutoRouter.of(context).push(const MainRoute());
+                    AutoRouter.of(context).push(const PreferencesRoute());
                   } else if (state is RegisterError) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(state.message)),
