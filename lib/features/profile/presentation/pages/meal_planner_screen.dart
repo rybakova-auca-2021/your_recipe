@@ -1,10 +1,15 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:horizontal_week_calendar/horizontal_week_calendar.dart';
+import 'package:intl/intl.dart';
 import 'package:your_recipe/core/colors.dart';
+import 'package:your_recipe/features/profile/presentation/bloc/meal_plan_bloc/meal_plan_bloc.dart';
 import 'package:your_recipe/router/app_router.dart';
+import '../../../../core/widgets/recipe_card.dart';
+import '../../domain/usecases/meal_plan_use_case.dart';
 
 @RoutePage()
 class MealPlannerScreen extends StatefulWidget {
@@ -15,12 +20,24 @@ class MealPlannerScreen extends StatefulWidget {
 }
 
 class _MealPlannerScreenState extends State<MealPlannerScreen> {
-  late final DateTime selectedDate;
+  late DateTime selectedDate;
+  final _blocMealPlan = MealPlanBloc(
+    addBulkMealPlans: GetIt.I<AddBulkMealPlans>(),
+    addMealPlan: GetIt.I<AddMealPlan>(),
+    deleteMealPlan: GetIt.I<DeleteMealPlan>(),
+    getMealPlan: GetIt.I<GetMealPlan>(),
+  );
 
   @override
   void initState() {
     super.initState();
     selectedDate = DateTime.now();
+    _loadMealPlan();
+  }
+
+  Future<void> _loadMealPlan() async {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+    _blocMealPlan.add(GetMealPlanEvent(formattedDate));
   }
 
   @override
@@ -59,6 +76,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
               onDateChange: (date) {
                 setState(() {
                   selectedDate = date;
+                  _loadMealPlan();
                 });
               },
               showTopNavbar: false,
@@ -70,48 +88,168 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
               inactiveTextColor: Colors.black,
               disabledTextColor: Colors.grey,
             ),
-            const Spacer(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "No data yet",
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      AutoRouter.of(context).push(const AddMealPlanRoute());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: AppColors.orange,
-                      backgroundColor: AppColors.orange,
-                      side: const BorderSide(color: AppColors.orange),
-                      padding: EdgeInsets.symmetric(vertical: 14.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.r),
+            Expanded(
+              child: BlocBuilder<MealPlanBloc, MealPlanState>(
+                bloc: _blocMealPlan,
+                builder: (context, state) {
+                  if (state is MealPlanLoading) {
+                    return const Center(child: CircularProgressIndicator(color: AppColors.orange));
+                  } else if (state is MealPlanSuccess) {
+                    final meals = state.data;
+                    if (meals.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "No data yet",
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: 16.h),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  AutoRouter.of(context)
+                                      .push(AddMealPlanRoute(date: DateFormat('yyyy-MM-dd').format(selectedDate)));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: AppColors.orange,
+                                  backgroundColor: AppColors.orange,
+                                  side: const BorderSide(color: AppColors.orange),
+                                  padding: EdgeInsets.symmetric(vertical: 14.h),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Add a Meal Plan',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    Map<String, List> groupedMeals = {};
+                    for (var meal in meals) {
+                      if (groupedMeals.containsKey(meal.mealType)) {
+                        groupedMeals[meal.mealType]?.add(meal);
+                      } else {
+                        groupedMeals[meal.mealType] = [meal];
+                      }
+                    }
+
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            children: groupedMeals.entries
+                                  .map((entry) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 8.h),
+                                      child: Text(
+                                        entry.key,
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.orange,
+                                        ),
+                                      ),
+                                    ),
+                                    Column(
+                                      children: entry.value.map<Widget>((meal) {
+                                        return Dismissible(
+                                          key: Key(meal.recipe.id.toString()),
+                                          direction: DismissDirection.endToStart,
+                                          onDismissed: (direction) {
+                                            _blocMealPlan.add(DeleteMealPlanEvent(
+                                              meal.id,
+                                              DateFormat('yyyy-MM-dd').format(selectedDate),
+                                            ));
+                                          },
+                                          background: Container(
+                                            color: Colors.red,
+                                            alignment: Alignment.centerRight,
+                                            padding: EdgeInsets.only(right: 20.w),
+                                            child: Icon(Icons.delete, color: Colors.white),
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              AutoRouter.of(context).push(DetailRecipeRoute(id: meal.recipe.id));
+                                            },
+                                            child: RecipeCard(
+                                              imageUrl: meal.recipe.imageUrl,
+                                              title: meal.recipe.name,
+                                              prepTime: meal.recipe.time.toString(),
+                                              servings: meal.recipe.numberOfPeople.toString(),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                          ),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              AutoRouter.of(context)
+                                  .push(AddMealPlanRoute(date: DateFormat('yyyy-MM-dd').format(selectedDate)));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: AppColors.orange,
+                              backgroundColor: AppColors.orange,
+                              side: const BorderSide(color: AppColors.orange),
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.r),
+                              ),
+                            ),
+                            child: Text(
+                              'Add a Meal Plan',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+
+
+                  } else if (state is MealPlanFailure) {
+                    return Center(
+                      child: Text(
+                        "Error loading data: ${state.message}",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.red,
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      'Add a Meal Plan',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
-            const Spacer(),
-            const Spacer(),
           ],
         ),
       ),

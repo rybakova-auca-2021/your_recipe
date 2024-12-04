@@ -1,3 +1,5 @@
+import '../../data/model/recipe_detail.dart';
+
 class RecipeDetailEntity {
   final int id;
   final String name;
@@ -30,4 +32,25 @@ class RecipeDetailEntity {
     required this.imageUrl,
     required this.isFavorite
   });
+}
+
+extension RecipeDetailMapper on RecipeDetailEntity {
+  RecipeDetail toModel() {
+    return RecipeDetail(
+      id: id,
+      name: name,
+      description: description,
+      shortDesc: shortDesc,
+      time: time,
+      difficulty: difficulty,
+      numberOfPeople: numberOfPeople,
+      protein: protein,
+      carbs: carbs,
+      fat: fat,
+      ingredients: ingredients,
+      steps: steps,
+      imageUrl: imageUrl,
+      isFavorite: isFavorite,
+    );
+  }
 }

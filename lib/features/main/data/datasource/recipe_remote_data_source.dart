@@ -15,6 +15,7 @@ abstract class RecipeRemoteDataSource {
   Future<FavoriteRecipe> saveRecipe(int id);
   Future<List<PopularRecipe>> fetchFavoriteRecipes();
   Future<PopularRecipe> fetchRecipeOfTheDay();
+  Future<List<RecipeDetail>> recipesByCategory(String category);
 }
 
 class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
@@ -212,6 +213,27 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
       return PopularRecipe.fromJson(response.data);
     } else {
       throw Exception('Failed to fetch recipe of the day');
+    }
+  }
+
+  @override
+  Future<List<RecipeDetail>> recipesByCategory(String category) async {
+    final accessToken = await _getAccessToken();
+
+    final response = await dio.get(
+      'https://ringtail-renewing-terminally.ngrok-free.app/chefmate/recipe/recipes/category/$category/',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = response.data;
+      return data.map((item) => RecipeDetail.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to fetch recipes by categories');
     }
   }
 }

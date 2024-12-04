@@ -11,10 +11,17 @@ part of 'app_router.dart';
 
 /// generated route for
 /// [AddMealPlanScreen]
-class AddMealPlanRoute extends PageRouteInfo<void> {
-  const AddMealPlanRoute({List<PageRouteInfo>? children})
-      : super(
+class AddMealPlanRoute extends PageRouteInfo<AddMealPlanRouteArgs> {
+  AddMealPlanRoute({
+    Key? key,
+    required String date,
+    List<PageRouteInfo>? children,
+  }) : super(
           AddMealPlanRoute.name,
+          args: AddMealPlanRouteArgs(
+            key: key,
+            date: date,
+          ),
           initialChildren: children,
         );
 
@@ -23,9 +30,29 @@ class AddMealPlanRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const AddMealPlanScreen();
+      final args = data.argsAs<AddMealPlanRouteArgs>();
+      return AddMealPlanScreen(
+        key: args.key,
+        date: args.date,
+      );
     },
   );
+}
+
+class AddMealPlanRouteArgs {
+  const AddMealPlanRouteArgs({
+    this.key,
+    required this.date,
+  });
+
+  final Key? key;
+
+  final String date;
+
+  @override
+  String toString() {
+    return 'AddMealPlanRouteArgs{key: $key, date: $date}';
+  }
 }
 
 /// generated route for

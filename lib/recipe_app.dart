@@ -34,9 +34,11 @@ import 'package:your_recipe/features/main/presentation/bloc/daily_recipe_bloc/da
 import 'package:your_recipe/features/main/presentation/bloc/detail_recipe_bloc/detail_recipe_bloc.dart';
 import 'package:your_recipe/features/main/presentation/bloc/filtered_recipes_bloc/filtered_recipe_bloc.dart';
 import 'package:your_recipe/features/main/presentation/bloc/popular_recipes_bloc/popular_recipes_bloc.dart';
+import 'package:your_recipe/features/main/presentation/bloc/recipe_by_category_bloc/recipe_by_category_bloc.dart';
 import 'package:your_recipe/features/main/presentation/bloc/searched_recipes_bloc/searched_recipes_bloc.dart';
 import 'package:your_recipe/features/profile/domain/usecases/fetch_profile_usecase.dart';
 import 'package:your_recipe/features/profile/domain/usecases/update_profile_usecase.dart';
+import 'package:your_recipe/features/profile/presentation/bloc/meal_plan_bloc/meal_plan_bloc.dart';
 import 'package:your_recipe/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:your_recipe/features/profile/presentation/bloc/profile_update/profile_bloc.dart';
 import 'package:your_recipe/router/app_router.dart';
@@ -49,6 +51,7 @@ import 'features/auth/domain/usecases/set_password_usecase.dart';
 import 'features/auth/presentation/bloc/reset_password/reset_password_bloc.dart';
 import 'features/grocery/domain/usecase/add_groceries_use_case.dart';
 import 'features/main/domain/usecase/fetch_favorites_use_case.dart';
+import 'features/main/domain/usecase/fetch_recipes_by_category_use_case.dart';
 import 'features/main/domain/usecase/save_recipe_use_case.dart';
 import 'features/main/domain/usecase/view_filtered_recipes_use_case.dart';
 import 'features/main/presentation/bloc/save_recipe_bloc/save_recipe_bloc.dart';
@@ -64,6 +67,7 @@ import 'features/preferences/presentation/bloc/fetch_cuisine_bloc/fetch_cuisine_
 import 'features/preferences/presentation/bloc/fetch_food_bloc/fetch_food_bloc.dart';
 import 'features/preferences/presentation/bloc/get_preferred_cuisine_bloc/get_preferred_cuisine_bloc.dart';
 import 'features/preferences/presentation/bloc/get_preferred_food_bloc/get_preferred_food_bloc.dart';
+import 'features/profile/domain/usecases/meal_plan_use_case.dart';
 import 'features/profile/presentation/bloc/fetch_favorite_bloc/fetch_favorite_bloc.dart';
 
 class RecipeApp extends StatefulWidget {
@@ -224,6 +228,19 @@ class _RecipeAppState extends State<RecipeApp> {
               BlocProvider<GetPreferredFoodBloc>(
                 create: (context) => GetPreferredFoodBloc(
                   getPreferredFoodUseCase: GetIt.I<GetPreferredFoodUseCase>(),
+                ),
+              ),
+              BlocProvider<RecipesByCategoryBloc>(
+                create: (context) => RecipesByCategoryBloc(
+                  GetIt.I<FetchRecipesByCategoryUseCase>(),
+                ),
+              ),
+              BlocProvider<MealPlanBloc>(
+                create: (context) => MealPlanBloc(
+                  addBulkMealPlans: GetIt.I<AddBulkMealPlans>(),
+                  addMealPlan: GetIt.I<AddMealPlan>(),
+                  deleteMealPlan:  GetIt.I<DeleteMealPlan>(),
+                  getMealPlan:  GetIt.I<GetMealPlan>(),
                 ),
               ),
             ],

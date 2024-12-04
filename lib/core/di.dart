@@ -7,7 +7,12 @@ import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:your_recipe/core/token_interceptor.dart';
 import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
+import 'package:your_recipe/features/main/domain/usecase/fetch_recipes_by_category_use_case.dart';
 import 'package:your_recipe/features/preferences/data/datasources/preference_remote_data_source.dart';
+import 'package:your_recipe/features/profile/data/datasources/meal_plan_data_source.dart';
+import 'package:your_recipe/features/profile/data/repository/plan_repository_impl.dart';
+import 'package:your_recipe/features/profile/domain/repositories/meal_plan_repository.dart';
+import 'package:your_recipe/features/profile/domain/usecases/meal_plan_use_case.dart';
 
 import '../features/auth/data/datasources/auth_remote_datasources.dart';
 import '../features/auth/data/repository/repository.dart';
@@ -131,6 +136,12 @@ Future<void> initDI() async {
         () => PreferenceRepositoryImpl(remoteDataSource: GetIt.I<PreferenceRemoteDataSource>()),
   );
 
+  GetIt.I.registerLazySingleton<PlanRemoteDataSource>(
+        () => PlanRemoteDataSourceImpl(dio: dio),
+  );
+  GetIt.I.registerLazySingleton<PlanRepository>(
+        () => PlanRepositoryImpl(remoteDataSource: GetIt.I<PlanRemoteDataSource>()),
+  );
 
   GetIt.I.registerLazySingleton<LoginUseCase>(() => LoginUseCase(GetIt.I<AuthRepository>()));
   GetIt.I.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(GetIt.I<AuthRepository>()));
@@ -165,6 +176,7 @@ Future<void> initDI() async {
   GetIt.I.registerLazySingleton<FetchFavoritesUseCase>(() => FetchFavoritesUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<SaveRecipeUseCase>(() => SaveRecipeUseCase(GetIt.I<RecipeRepository>()));
   GetIt.I.registerLazySingleton<FetchRecipeOfTheDayUseCase>(() => FetchRecipeOfTheDayUseCase(GetIt.I<RecipeRepository>()));
+  GetIt.I.registerLazySingleton<FetchRecipesByCategoryUseCase>(() => FetchRecipesByCategoryUseCase(GetIt.I<RecipeRepository>()));
 
   getIt.registerLazySingleton<AddPreferredCuisineUseCase>(() => AddPreferredCuisineUseCase(repository: GetIt.I<PreferenceRepository>()));
   getIt.registerLazySingleton<AddPreferredFoodUseCase>(() => AddPreferredFoodUseCase(repository: getIt<PreferenceRepository>()));
@@ -172,4 +184,10 @@ Future<void> initDI() async {
   getIt.registerLazySingleton<FetchFoodUseCase>(() => FetchFoodUseCase(repository: getIt<PreferenceRepository>()),);
   getIt.registerLazySingleton<GetPreferredCuisineUseCase>(() => GetPreferredCuisineUseCase(repository: getIt<PreferenceRepository>()),);
   getIt.registerLazySingleton<GetPreferredFoodUseCase>(() => GetPreferredFoodUseCase(repository: getIt<PreferenceRepository>()),);
+
+
+  getIt.registerLazySingleton<AddBulkMealPlans>(() => AddBulkMealPlans(getIt<PlanRepository>()));
+  getIt.registerLazySingleton<AddMealPlan>(() => AddMealPlan(getIt<PlanRepository>()));
+  getIt.registerLazySingleton<DeleteMealPlan>(() => DeleteMealPlan(getIt<PlanRepository>()));
+  getIt.registerLazySingleton<GetMealPlan>(() => GetMealPlan(getIt<PlanRepository>()));
 }

@@ -9,6 +9,7 @@ class RecipeCard extends StatelessWidget {
   final String title;
   final String prepTime;
   final String servings;
+  final Color? borderColor;
 
   const RecipeCard({
     Key? key,
@@ -16,6 +17,7 @@ class RecipeCard extends StatelessWidget {
     required this.title,
     required this.prepTime,
     required this.servings,
+    this.borderColor
   }) : super(key: key);
 
   @override
@@ -26,6 +28,7 @@ class RecipeCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.r),
         color: AppColors.lightGrey,
+        border: Border.all(color: borderColor ?? AppColors.lightGrey)
       ),
       child: Row(
         children: [

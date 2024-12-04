@@ -14,4 +14,5 @@ abstract class RecipeRepository {
   Future<FavoriteEntity> saveRecipe(int id);
   Future<List<PopularRecipeEntity>> fetchFavoriteRecipes();
   Future<PopularRecipeEntity> fetchRecipeOfTheDay();
+  Future<List<RecipeDetailEntity>> recipesByCategory(String category);
 }

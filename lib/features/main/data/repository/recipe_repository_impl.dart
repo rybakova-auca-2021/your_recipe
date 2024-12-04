@@ -64,4 +64,10 @@ class RecipeRepositoryImpl implements RecipeRepository {
     final recipe = await remoteDataSource.fetchRecipeOfTheDay();
     return recipe.toEntity();
   }
+
+  @override
+  Future<List<RecipeDetailEntity>> recipesByCategory(String category) async {
+    final recipes = await remoteDataSource.recipesByCategory(category);
+    return recipes.map((recipe) => recipe.toEntity()).toList();
+  }
 }

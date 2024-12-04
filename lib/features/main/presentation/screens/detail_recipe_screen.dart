@@ -18,6 +18,7 @@ import 'package:your_recipe/features/main/presentation/bloc/detail_recipe_bloc/d
 import '../../../../generated/assets.dart';
 import '../../../grocery/domain/entities/grocery_item_entity.dart';
 import '../bloc/save_recipe_bloc/save_recipe_bloc.dart';
+import '../widgets/add_to_meal_plan_bottom_sheet.dart';
 
 @RoutePage()
 class DetailRecipeScreen extends StatefulWidget {
@@ -34,7 +35,6 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
   bool _ingredientsExpanded = false;
   bool _stepsExpanded = false;
   bool _isFavorited = false;
-  bool _showButton = true;
   final Set<String> _checkedIngredients = {};
 
   final Random random = Random();
@@ -202,6 +202,37 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
                             ],
                           ),
                           SizedBox(height: 16.h),
+                          SizedBox(
+                            height: 40.h,
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  side: const BorderSide(color: AppColors.orange),
+                                ),
+                                backgroundColor: AppColors.lightBg,
+                              ),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return MealPlanBottomSheet(id: detailRecipe.id,);
+                                  },
+                                );
+                              },
+                              label: const Text(
+                                'Add to meal plan',
+                                style: TextStyle(color: AppColors.orange),
+                              ),
+                              icon: const Icon(
+                                Icons.add,
+                                color: AppColors.orange,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 16.h),
                           Row(
                             children: [
                               Text(
@@ -227,45 +258,42 @@ class _DetailRecipeScreenState extends State<DetailRecipeScreen> {
                           ),
                           ..._buildIngredientList(detailRecipe.ingredients),
                           SizedBox(height: 16.h),
-                          Visibility(
-                            visible: _showButton,
-                            child: SizedBox(
-                              height: 46.h,
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.r),
-                                    side: const BorderSide(color: AppColors.orange),
-                                  ),
-                                  backgroundColor: AppColors.lightBg,
+                          SizedBox(
+                            height: 46.h,
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  side: const BorderSide(color: AppColors.orange),
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    final groceryItems = _checkedIngredients
-                                        .map((ingredient) {
-                                      final parsed = _parseIngredient(ingredient);
-                                      if (parsed != null) {
-                                        return GroceryItemEntity(
-                                          name: parsed['name']!,
-                                          quantity: parsed['quantity']!,
-                                        );
-                                      }
-                                      return null;
-                                    })
-                                        .whereType<GroceryItemEntity>()
-                                        .toList();
-                                    context.read<GroceryBloc>().add(GroceriesAdded(groceryItems));
-                                  });
-                                },
-                                label: const Text(
-                                  'Add to Grocery List',
-                                  style: TextStyle(color: AppColors.orange),
-                                ),
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: AppColors.orange,
-                                ),
+                                backgroundColor: AppColors.lightBg,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  final groceryItems = _checkedIngredients
+                                      .map((ingredient) {
+                                    final parsed = _parseIngredient(ingredient);
+                                    if (parsed != null) {
+                                      return GroceryItemEntity(
+                                        name: parsed['name']!,
+                                        quantity: parsed['quantity']!,
+                                      );
+                                    }
+                                    return null;
+                                  })
+                                      .whereType<GroceryItemEntity>()
+                                      .toList();
+                                  context.read<GroceryBloc>().add(GroceriesAdded(groceryItems));
+                                });
+                              },
+                              label: const Text(
+                                'Add to Grocery List',
+                                style: TextStyle(color: AppColors.orange),
+                              ),
+                              icon: const Icon(
+                                Icons.add,
+                                color: AppColors.orange,
                               ),
                             ),
                           ),
