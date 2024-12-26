@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:your_recipe/features/auth/domain/usecases/firebase_auth_usecase.dart';
 import 'package:your_recipe/features/auth/domain/usecases/login_usecase.dart';
 import 'package:your_recipe/features/auth/domain/usecases/register_usecase.dart';
 import 'package:your_recipe/features/auth/domain/usecases/reset_password_usecase.dart';
@@ -109,11 +111,13 @@ class _RecipeAppState extends State<RecipeApp> {
               BlocProvider(
                 create: (context) => LoginBloc(
                   GetIt.I<LoginUseCase>(),
+                  GetIt.I<FirebaseAuthUsecase>(),
                 ),
               ),
               BlocProvider(
                 create: (context) => RegisterBloc(
                   GetIt.I<RegisterUseCase>(),
+                  GetIt.I<FirebaseAuthUsecase>(),
                 ),
               ),
               BlocProvider(

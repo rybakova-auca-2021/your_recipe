@@ -9,6 +9,7 @@ import 'package:your_recipe/router/app_router.dart';
 
 import '../../../../core/l10n/messages_en.dart';
 import '../../../../core/l10n/messages_ru.dart';
+import '../bloc/register/register_bloc.dart';
 
 @RoutePage()
 class RegisterScreen extends StatelessWidget {
@@ -207,7 +208,7 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    // Google Login action
+                    context.read<RegisterBloc>().add(GoogleSignInRequested());
                   },
                 ),
               ),

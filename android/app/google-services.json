@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "310098800680",
+    "project_id": "chefmate-b9cae",
+    "storage_bucket": "chefmate-b9cae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310098800680:android:46473403803922a44e851d",
+        "android_client_info": {
+          "package_name": "com.example.chefmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310098800680-a37nqfeee54vnauk79uti6vn0c1r5jjb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chefmate",
+            "certificate_hash": "d016c08038bf15995518a6f032a198ed6bb4eced"
+          }
+        },
+        {
+          "client_id": "310098800680-5k1u3tingo4lbovos84ifj162cbp86tf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB80QhaIfzeD4yaqg-d_cPnDYOC7aFej7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310098800680-5k1u3tingo4lbovos84ifj162cbp86tf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "310098800680-bnpq5l109au3d0t1crnrogj7vihp2g7h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chefmate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -14,3 +14,15 @@ class LoginRequested extends LoginEvent {
   @override
   List<Object?> get props => [email, password];
 }
+
+
+class FirebaseAuthRequested extends LoginEvent {
+  final String idToken;
+
+  FirebaseAuthRequested(this.idToken);
+
+  @override
+  List<Object?> get props => [idToken];
+}
+
+class GoogleSignInRequested extends LoginEvent {}

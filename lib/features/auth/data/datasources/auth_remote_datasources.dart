@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:your_recipe/features/auth/data/models/firebase_response_model.dart';
 import '../../domain/usecases/reset_password_usecase.dart';
+import '../models/firebase_model.dart';
 import '../models/login_model.dart';
 import '../models/login_response_model.dart';
 import '../models/register_model.dart';
@@ -9,6 +11,7 @@ import '../models/password_set_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponseModel> login(LoginModel loginModel);
+  Future<FirebaseResponseModel> firebaseAuth(FirebaseModel loginModel);
   Future<LoginResponseModel> register(RegisterModel registerModel);
   Future<PasswordResetResponseEntity> resetPassword(PasswordResetModel passwordResetModel);
   Future<void> sendCode(SendCodeModel sendCodeModel);
@@ -34,6 +37,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return LoginResponseModel.fromJson(response.data);
   }
 
+  @override
+  Future<FirebaseResponseModel> firebaseAuth(FirebaseModel firebaseModel) async {
+    final response = await dio.post(
+      'https://ringtail-renewing-terminally.ngrok-free.app/chefmate/users/auth/firebase/',
+      data: firebaseModel.toJson(),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Login with google failed');
+    }
+
+    return FirebaseResponseModel.fromJson(response.data);
+  }
 
   @override
   Future<LoginResponseModel> register(RegisterModel registerModel) async {

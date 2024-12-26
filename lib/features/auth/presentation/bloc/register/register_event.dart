@@ -15,3 +15,5 @@ class RegisterRequested extends RegisterEvent {
   @override
   List<Object?> get props => [email, password, confirmPassword];
 }
+
+class GoogleSignInRequested extends RegisterEvent {}

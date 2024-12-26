@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:your_recipe/core/token_interceptor.dart';
+import 'package:your_recipe/features/auth/domain/usecases/firebase_auth_usecase.dart';
 import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipes_by_category_use_case.dart';
@@ -72,10 +74,12 @@ Future<void> initDI() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerSingleton<SharedPreferences>(sharedPreferences);
 
+  await Firebase.initializeApp();
+
   final talker = TalkerFlutter.init(
     settings: TalkerSettings(
       maxHistoryItems: 30,
-      titles: {TalkerLogType.exception: 'Error: '},
+      titles: {TalkerLogType.exception.name: 'Error: '},
       enabled: true,
     ),
   );
@@ -144,6 +148,7 @@ Future<void> initDI() async {
   );
 
   GetIt.I.registerLazySingleton<LoginUseCase>(() => LoginUseCase(GetIt.I<AuthRepository>()));
+  GetIt.I.registerLazySingleton<FirebaseAuthUsecase>(() => FirebaseAuthUsecase(GetIt.I<AuthRepository>()));
   GetIt.I.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(GetIt.I<AuthRepository>()));
   GetIt.I.registerLazySingleton<ResetPasswordUseCase>(() => ResetPasswordUseCase(GetIt.I<AuthRepository>()));
   GetIt.I.registerLazySingleton<SendCodeUseCase>(() => SendCodeUseCase(GetIt.I<AuthRepository>()));

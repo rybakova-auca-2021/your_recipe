@@ -1,3 +1,5 @@
+import 'package:your_recipe/features/auth/data/models/firebase_model.dart';
+import 'package:your_recipe/features/auth/data/models/firebase_response_model.dart';
 import 'package:your_recipe/features/auth/data/models/login_model.dart';
 import 'package:your_recipe/features/auth/data/models/register_model.dart';
 import 'package:your_recipe/features/auth/data/models/password_reset_model.dart';
@@ -30,6 +32,18 @@ class AuthRepositoryImpl implements AuthRepository {
       userId: loginResponseModel.userId,
       accessToken: loginResponseModel.accessToken,
       refreshToken: loginResponseModel.refreshToken,
+    );
+  }
+
+
+  @override
+  Future<FirebaseResponseModel> firebaseAuth(String idToken) async {
+    final authResponse = await remoteDataSource.firebaseAuth(FirebaseModel(idToken: idToken));
+    return FirebaseResponseModel(
+        accessToken: authResponse.accessToken,
+        refreshToken: authResponse.refreshToken,
+        message: authResponse.message,
+        userId: authResponse.userId
     );
   }
 

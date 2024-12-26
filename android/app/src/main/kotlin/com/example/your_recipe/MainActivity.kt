@@ -1,4 +1,4 @@
-package com.example.your_recipe
+package com.example.chefmate
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:your_recipe/core/colors.dart';
 import 'package:your_recipe/router/app_router.dart';
 import 'package:auto_route/auto_route.dart';
@@ -182,7 +184,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // Google Login action
+                  context.read<LoginBloc>().add(GoogleSignInRequested());
                 },
               ),
             ),
