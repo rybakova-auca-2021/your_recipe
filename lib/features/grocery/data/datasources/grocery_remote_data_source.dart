@@ -81,7 +81,7 @@ class GroceryRemoteDataSourceImpl implements GroceryRemoteDataSource {
       ),
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 204) {
       throw Exception('Deleting all groceries failed');
     }
   }
@@ -99,7 +99,7 @@ class GroceryRemoteDataSourceImpl implements GroceryRemoteDataSource {
       ),
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 204) {
       throw Exception('Deleting grocery failed');
     }
   }

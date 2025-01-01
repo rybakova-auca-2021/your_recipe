@@ -12,8 +12,10 @@ import 'package:your_recipe/features/profile/domain/usecases/fetch_profile_useca
 import 'package:your_recipe/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:your_recipe/features/profile/presentation/bloc/profile_update/profile_bloc.dart';
 
+import '../../../../core/l10n/language_cubit.dart';
 import '../../../../core/l10n/messages_en.dart';
 import '../../../../core/l10n/messages_ru.dart';
+import '../widgets/language_dropdown.dart';
 
 @RoutePage()
 class EditProfileScreen extends StatefulWidget {
@@ -191,6 +193,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             borderRadius: BorderRadius.circular(10.r),
                           ),
                         ),
+                      ),
+                      SizedBox(height: 16.h),
+                      ProfileDropdownField(
+                        label: isRussian ? messagesRu['language'] ?? '' : messagesEn['language'] ?? '',
+                        value: isRussian ? 'Russian' : 'English', // Change value based on locale
+                        onChanged: (newValue) {
+                          if (newValue == 'English') {
+                            context.read<LanguageCubit>().changeLanguage('en');
+                          } else if (newValue == 'Russian') {
+                            context.read<LanguageCubit>().changeLanguage('ru');
+                          }
+                        },
                       ),
                       const Spacer(),
                       SizedBox(

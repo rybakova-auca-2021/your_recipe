@@ -188,23 +188,24 @@ class _GroceryListPageState extends State<GroceryScreen> {
                       );
                     } else if (state is ViewAllGroceriesSuccess) {
                       groceries = state.groceries;
-
-                      if (groceries.isEmpty) {
-                        return const Center(
-                          child: Text(
-                            "No data yet",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        );
-                      }
-
                       if (_selectedItems.length != groceries.length) {
                         _selectedItems = List.filled(groceries.length, false);
                       }
-
                       return ListView.builder(
-                        itemCount: groceries.length,
+                        itemCount: groceries.isEmpty ? 1 : groceries.length,
                         itemBuilder: (context, index) {
+                          if (groceries.isEmpty) {
+                            return Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 0.3.sh),
+                                child: const Text(
+                                  "No data yet. Pull to refresh.",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                            );
+                          }
+
                           final groceryItem = groceries[index];
                           return GroceryItemTile(
                             groceryItem: groceryItem,
@@ -227,10 +228,11 @@ class _GroceryListPageState extends State<GroceryScreen> {
                       );
                     }
 
-                    return Container();
+                    return Container(); // Default empty state
                   },
-                )
+                ),
               ),
+
             ),
             SizedBox(height: 16.h),
             _isSelectionMode

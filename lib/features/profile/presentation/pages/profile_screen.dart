@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:your_recipe/features/ingredients/presentation/screen/ingredients_screen.dart';
 import 'package:your_recipe/features/profile/presentation/widgets/profile_option_row.dart';
 
 import '../../../../core/l10n/language_cubit.dart';
@@ -48,12 +49,6 @@ class ProfileScreen extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.notifications, color: Colors.orange),
-                onPressed: () {
-                  AutoRouter.of(context).push(const NotificationsRoute());
-                },
-              ),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.edit, color: Colors.orange),
@@ -87,35 +82,23 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 24.h),
-                        ProfileDetailField(
-                          label: isRussian ? messagesRu['your_email'] ?? '' : messagesEn['your_email'] ?? '',
-                          icon: Icons.email_outlined,
-                          value: profile.email!,
-                        ),
-                        SizedBox(height: 16.h),
-                        ProfileDropdownField(
-                          label: isRussian ? messagesRu['language'] ?? '' : messagesEn['language'] ?? '',
-                          value: isRussian ? 'Russian' : 'English', // Change value based on locale
-                          onChanged: (newValue) {
-                            if (newValue == 'English') {
-                              context.read<LanguageCubit>().changeLanguage('en');
-                            } else if (newValue == 'Russian') {
-                              context.read<LanguageCubit>().changeLanguage('ru');
-                            }
-                          },
-                        ),
-                        SizedBox(height: 16.h),
-                        ProfileOptionRow(
-                            label: isRussian ? messagesRu['meal_plan'] ?? '' : messagesEn['meal_plan'] ?? '',
-                            onTap: () {
-                              AutoRouter.of(context).push(const MealPlannerRoute());
-                            }
-                        ),
-                        ProfileOptionRow(
-                            label: isRussian ? messagesRu['saved_recipes'] ?? '' : messagesEn['saved_recipes'] ?? '',
-                            onTap: () {
-                              AutoRouter.of(context).push(const FavoritesRoute());
-                            }
+                        Row(
+                          children: [
+                            ProfileOptionCard(
+                                imagePath: 'https://i.ibb.co/F8WZ292/image.png',
+                                label: isRussian ? messagesRu['meal_plan'] ?? '' : messagesEn['meal_plan'] ?? '',
+                                onTap: () {
+                                  AutoRouter.of(context).push(const MealPlannerRoute());
+                                }
+                            ),
+                            ProfileOptionCard(
+                                imagePath: 'https://i.ibb.co/8X2CXgp/image.png',
+                                label: isRussian ? messagesRu['your_ingredients'] ?? '' : messagesEn['your_ingredients'] ?? '',
+                                onTap: () {
+                                  AutoRouter.of(context).push(const IngredientsRoute());
+                                }
+                            )
+                          ],
                         )
                       ],
                     );

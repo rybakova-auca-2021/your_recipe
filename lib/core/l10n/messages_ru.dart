@@ -53,5 +53,6 @@ const Map<String, String> messagesRu = {
   "receive_app_news": "Получать новости приложения",
   "new_recipes": "Новые рецепты",
   "meal_planning_reminders": "Напоминания о планировании питания",
-  "save": "Сохранить"
+  "save": "Сохранить",
+  "your_ingredients": "Ваши продукты"
 };

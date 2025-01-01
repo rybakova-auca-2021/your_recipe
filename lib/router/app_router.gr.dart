@@ -380,6 +380,25 @@ class GroceryRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [IngredientsScreen]
+class IngredientsRoute extends PageRouteInfo<void> {
+  const IngredientsRoute({List<PageRouteInfo>? children})
+      : super(
+          IngredientsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'IngredientsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const IngredientsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [LoginScreen]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
@@ -413,6 +432,25 @@ class MainRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MainScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [MealCreationPage]
+class MealCreationRoute extends PageRouteInfo<void> {
+  const MealCreationRoute({List<PageRouteInfo>? children})
+      : super(
+          MealCreationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MealCreationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MealCreationPage();
     },
   );
 }

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -10,6 +12,8 @@ import 'package:your_recipe/features/auth/domain/usecases/firebase_auth_usecase.
 import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipes_by_category_use_case.dart';
+import 'package:your_recipe/features/meal_creation/data/repository/gemini_meal_repository.dart';
+import 'package:your_recipe/features/meal_creation/domain/repository/meal_repository.dart';
 import 'package:your_recipe/features/preferences/data/datasources/preference_remote_data_source.dart';
 import 'package:your_recipe/features/profile/data/datasources/meal_plan_data_source.dart';
 import 'package:your_recipe/features/profile/data/repository/plan_repository_impl.dart';
@@ -70,11 +74,18 @@ import '../features/profile/presentation/bloc/profile_update/profile_bloc.dart';
 
 final getIt = GetIt.instance;
 
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
+
 Future<void> initDI() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerSingleton<SharedPreferences>(sharedPreferences);
 
   await Firebase.initializeApp();
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   final talker = TalkerFlutter.init(
     settings: TalkerSettings(
@@ -145,6 +156,10 @@ Future<void> initDI() async {
   );
   GetIt.I.registerLazySingleton<PlanRepository>(
         () => PlanRepositoryImpl(remoteDataSource: GetIt.I<PlanRemoteDataSource>()),
+  );
+
+  GetIt.I.registerLazySingleton<AbstractMealRepository>(
+        () => GeminiMealRepository(),
   );
 
   GetIt.I.registerLazySingleton<LoginUseCase>(() => LoginUseCase(GetIt.I<AuthRepository>()));

@@ -52,5 +52,7 @@ const Map<String, String> messagesEn = {
   "receive_app_news": "Receive App News",
   "new_recipes": "New recipes",
   "meal_planning_reminders": "Meal planning reminders",
-  "save": "Save"
+  "save": "Save",
+
+  "your_ingredients": "Your ingredients"
 };

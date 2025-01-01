@@ -9,6 +9,7 @@ import '../features/auth/presentation/pages/register_screen.dart';
 import '../features/auth/presentation/pages/update_password_screen.dart';
 import '../features/auth/presentation/pages/welcome_screen.dart';
 import '../features/grocery/presentation/screens/grocery_screen.dart';
+import '../features/ingredients/presentation/screen/ingredients_screen.dart';
 import '../features/main/presentation/screens/detail_recipe_screen.dart';
 import '../features/main/presentation/screens/fliter_screen.dart';
 import '../features/main/presentation/screens/main_screen.dart';
@@ -16,6 +17,7 @@ import '../features/main/presentation/screens/popular_screen.dart';
 import '../features/main/presentation/screens/collection_screen.dart';
 import '../features/main/presentation/screens/recipe_filter_screen.dart';
 import '../features/main/presentation/screens/detail_collection_screen.dart';
+import '../features/meal_creation/presentation/meal_creation_page.dart';
 import '../features/onboard/screens/onboard_screen.dart';
 import '../features/preferences/presentation/pages/food_preference_screen.dart';
 import '../features/preferences/presentation/pages/preferences_screen.dart';
@@ -54,6 +56,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: RecipeFilterRoute.page),
     AutoRoute(page: DetailCollectionRoute.page),
     AutoRoute(page: DetailRecipeRoute.page),
+    AutoRoute(page: MealCreationRoute.page),
+    AutoRoute(page: IngredientsRoute.page),
   ];
 }
 

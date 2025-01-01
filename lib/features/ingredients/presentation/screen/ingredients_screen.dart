@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +16,7 @@ import '../../domain/usecase/view_ingredients_usecase.dart';
 import '../widget/add_ingredient_dialog.dart';
 import '../widget/ingredient_list.dart';
 
+@RoutePage()
 class IngredientsScreen extends StatefulWidget {
   const IngredientsScreen({super.key});
 

@@ -22,10 +22,6 @@ class ProfileDropdownField extends StatelessWidget {
         SizedBox(height: 8.h),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(10.r),
-          ),
           child: DropdownButton<String>(
             value: value,
             isExpanded: true,

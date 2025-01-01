@@ -65,9 +65,8 @@ class _CollectionScreenState extends State<CollectionScreen> {
               return const Center(child: CircularProgressIndicator(color: AppColors.orange));
             } else if (state is CollectionsLoaded) {
               return SizedBox(
-                height: 220.h,
                 child: ListView(
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: Axis.vertical,
                   children: state.collections.map((collection) {
                     return GestureDetector(
                       onTap: () {

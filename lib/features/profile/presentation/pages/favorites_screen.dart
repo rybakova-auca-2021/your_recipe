@@ -1,8 +1,10 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:your_recipe/router/app_router.dart';
 
 import '../../../../core/colors.dart';
 import '../../../../core/widgets/recipe_card.dart';
@@ -38,16 +40,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        ),
         title: Text(
           "Saved recipes",
           style: TextStyle(
@@ -56,6 +48,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             fontWeight: FontWeight.w400,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh, color: AppColors.black),
+            onPressed: _loadFavorites,
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0.r),
@@ -77,11 +75,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   itemCount: state.recipes.length,
                   itemBuilder: (context, index) {
                     final recipe = state.recipes[index];
-                    return RecipeCard(
-                      imageUrl: recipe.imageUrl,
-                      title: recipe.name,
-                      prepTime: recipe.time,
-                      servings: recipe.numberOfPeople,
+                    return GestureDetector(
+                      onTap: () {
+                        AutoRouter.of(context).push(DetailRecipeRoute(id: recipe.id));
+                      },
+                      child: RecipeCard(
+                        imageUrl: recipe.imageUrl,
+                        title: recipe.name,
+                        prepTime: recipe.time,
+                        servings: recipe.numberOfPeople,
+                      ),
                     );
                   },
                 );

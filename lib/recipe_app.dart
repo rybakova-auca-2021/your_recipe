@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:your_recipe/features/auth/domain/usecases/firebase_auth_usecase.dart';
 import 'package:your_recipe/features/auth/domain/usecases/login_usecase.dart';
 import 'package:your_recipe/features/auth/domain/usecases/register_usecase.dart';
@@ -48,6 +51,8 @@ import 'core/bloc/save_token_cubit.dart';
 import 'core/l10n/app_localizations.dart';
 import 'core/l10n/language_cubit.dart';
 import 'core/pref.dart';
+import 'core/service/device_registration_service.dart';
+import 'core/service/notification_service.dart';
 import 'features/auth/domain/usecases/send_code_usecase.dart';
 import 'features/auth/domain/usecases/set_password_usecase.dart';
 import 'features/auth/presentation/bloc/reset_password/reset_password_bloc.dart';
@@ -57,6 +62,9 @@ import 'features/main/domain/usecase/fetch_recipes_by_category_use_case.dart';
 import 'features/main/domain/usecase/save_recipe_use_case.dart';
 import 'features/main/domain/usecase/view_filtered_recipes_use_case.dart';
 import 'features/main/presentation/bloc/save_recipe_bloc/save_recipe_bloc.dart';
+import 'features/meal_creation/data/repository/gemini_meal_repository.dart';
+import 'features/meal_creation/domain/cubit/meal/meal_cubit.dart';
+import 'features/meal_creation/domain/repository/meal_repository.dart';
 import 'features/preferences/domain/usecases/add_preferred_cuisine_use_case.dart';
 import 'features/preferences/domain/usecases/add_preferred_food_use_case.dart';
 import 'features/preferences/domain/usecases/fetch_cuisine_use_case.dart';
@@ -88,13 +96,30 @@ class _RecipeAppState extends State<RecipeApp> {
   void initState() {
     super.initState();
     _loadLanguage();
+    setupNotifications();
   }
 
   Future<void> _loadLanguage() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _languageCode = prefs.getString('languageCode') ?? 'en'; // Default to English
+      _languageCode = prefs.getString('languageCode') ?? 'en';
     });
+  }
+
+  Future<void> setupNotifications() async {
+    String randomName = "user_${const Uuid().v4().substring(0, 8)}";
+    String deviceType = Platform.isAndroid ? "android" : Platform.isIOS ? "ios" : "unknown";
+    String? token = await NotificationService.getDeviceToken();
+
+    if (token != null) {
+      await DeviceRegistrationService.registerDevice(
+        name: randomName,
+        deviceType: deviceType,
+        registrationToken: token,
+      );
+    } else {
+      print("Failed to get FCM token.");
+    }
   }
 
   @override
@@ -245,6 +270,14 @@ class _RecipeAppState extends State<RecipeApp> {
                   addMealPlan: GetIt.I<AddMealPlan>(),
                   deleteMealPlan:  GetIt.I<DeleteMealPlan>(),
                   getMealPlan:  GetIt.I<GetMealPlan>(),
+                ),
+              ),
+              RepositoryProvider<AbstractMealRepository>(
+                create: (_) => GeminiMealRepository(),
+              ),
+              BlocProvider<MealCubit>(
+                create: (context) => MealCubit(
+                  context.read<AbstractMealRepository>(),
                 ),
               ),
             ],
