@@ -9,4 +9,5 @@ abstract class GroceryRepository {
   Future<List<GroceryItemResponseEntity>> viewGroceries();
   Future<void> deleteGrocery(int id);
   Future<void> deleteAll();
+  Future<void> markPurchased(int id);
 }

@@ -9,6 +9,7 @@ import 'package:your_recipe/features/grocery/domain/usecase/add_groceries_use_ca
 import 'package:your_recipe/features/grocery/domain/usecase/add_grocery_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/delete_grocery_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/edit_grocery_usecase.dart';
+import 'package:your_recipe/features/grocery/domain/usecase/mark_purchased_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/view_groceries_usecase.dart';
 import 'package:your_recipe/features/grocery/presentation/bloc/grocery_bloc/grocery_bloc.dart';
 import 'package:your_recipe/features/grocery/presentation/widgets/grocery_item_tile.dart';
@@ -26,16 +27,18 @@ class GroceryScreen extends StatefulWidget {
 
 class _GroceryListPageState extends State<GroceryScreen> {
   final _blocAllGroceries = GroceryBloc(
-    viewUsecase: GetIt.I<ViewGroceriesUsecase>(),
-    addUsecase: GetIt.I<AddGroceryUsecase>(),
-    addMultipleUsecase: GetIt.I<AddGroceriesUseCase>(),
-    deleteAllUsecase: GetIt.I<DeleteAllGroceriesUsecase>(),
-    deleteUsecase: GetIt.I<DeleteGroceryUsecase>(),
-    editUsecase: GetIt.I<EditGroceryUsecase>(),
+      viewUsecase: GetIt.I<ViewGroceriesUsecase>(),
+      addUsecase: GetIt.I<AddGroceryUsecase>(),
+      addMultipleUsecase: GetIt.I<AddGroceriesUseCase>(),
+      deleteAllUsecase: GetIt.I<DeleteAllGroceriesUsecase>(),
+      deleteUsecase: GetIt.I<DeleteGroceryUsecase>(),
+      editUsecase: GetIt.I<EditGroceryUsecase>(),
+      markPurchasedUsecase: GetIt.I<MarkPurchasedUsecase>()
   );
 
   bool _isSelectionMode = false;
   List<bool> _selectedItems = [];
+  List<GroceryItemResponseEntity> groceries = [];  // Declare the groceries list
 
   @override
   void initState() {
@@ -148,10 +151,16 @@ class _GroceryListPageState extends State<GroceryScreen> {
     );
   }
 
+  void _handlePurchasedChanged(int index, bool value) {
+    setState(() {
+      groceries[index].purchased = value;
+    });
+    context.read<GroceryBloc>().add(GroceryPurchased(id: groceries[index].id));
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    List<GroceryItemResponseEntity> groceries = [];
-
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
@@ -211,10 +220,14 @@ class _GroceryListPageState extends State<GroceryScreen> {
                             groceryItem: groceryItem,
                             isSelectionMode: _isSelectionMode,
                             isSelected: _selectedItems[index],
+                            isPurchased: groceryItem.purchased,
                             onSelectChanged: (value) {
                               setState(() {
                                 _selectedItems[index] = value!;
                               });
+                            },
+                            onPurchasedChanged: (value) {
+                              _handlePurchasedChanged(index, value ?? true);
                             },
                           );
                         },
@@ -232,7 +245,6 @@ class _GroceryListPageState extends State<GroceryScreen> {
                   },
                 ),
               ),
-
             ),
             SizedBox(height: 16.h),
             _isSelectionMode

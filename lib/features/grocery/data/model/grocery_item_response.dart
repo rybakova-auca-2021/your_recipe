@@ -3,12 +3,14 @@ class GroceryItemResponse {
   final int user;
   final String name;
   final int quantity;
+  final bool purchased;
 
   GroceryItemResponse({
     required this.id,
     required this.user,
     required this.name,
     required this.quantity,
+    required this.purchased
   });
 
   Map<String, dynamic> toJson() {
@@ -17,6 +19,7 @@ class GroceryItemResponse {
       'user': user,
       'name': name,
       'quantity': quantity,
+      'purchased': purchased
     };
   }
 
@@ -26,6 +29,7 @@ class GroceryItemResponse {
       user: json['user'],
       name: json['name'],
       quantity: json['quantity'],
+      purchased: json['purchased']
     );
   }
 }

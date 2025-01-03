@@ -5,23 +5,37 @@ abstract class GroceryEvent extends Equatable {
 }
 
 class AllGroceriesViewed extends GroceryEvent {}
+
 class GroceryAdded extends GroceryEvent {
   final String name;
   final String? quantity;
 
   GroceryAdded({required this.name, this.quantity});
 }
+
 class GroceriesAdded extends GroceryEvent {
   final List<GroceryItemEntity> groceries;
 
   GroceriesAdded(this.groceries);
 }
+
 class AllGroceriesDeleted extends GroceryEvent {}
+
 class GroceryDeleted extends GroceryEvent {
   final int id;
 
   GroceryDeleted(this.id);
 }
+
+class GroceryPurchased extends GroceryEvent {
+  final int id;
+
+  GroceryPurchased({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}
+
 class GroceryEdited extends GroceryEvent {
   final int id;
   final String name;

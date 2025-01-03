@@ -11,7 +11,9 @@ class GroceryItemTile extends StatefulWidget {
   final GroceryItemResponseEntity groceryItem;
   final bool isSelectionMode;
   final bool isSelected;
+  final bool isPurchased;
   final ValueChanged<bool?> onSelectChanged;
+  final ValueChanged<bool?> onPurchasedChanged;
 
   const GroceryItemTile({
     Key? key,
@@ -19,6 +21,8 @@ class GroceryItemTile extends StatefulWidget {
     required this.isSelectionMode,
     required this.onSelectChanged,
     required this.isSelected,
+    required this.onPurchasedChanged,
+    required this.isPurchased
   }) : super(key: key);
 
   @override
@@ -129,6 +133,13 @@ class _GroceryItemTileState extends State<GroceryItemTile> {
                     ],
                   ),
                 ],
+              ),
+              Checkbox(
+                activeColor: Colors.orange,
+                value: widget.isPurchased,
+                onChanged: (bool? newValue) {
+                  widget.onPurchasedChanged(newValue ?? false);
+                },
               ),
             ],
           ),

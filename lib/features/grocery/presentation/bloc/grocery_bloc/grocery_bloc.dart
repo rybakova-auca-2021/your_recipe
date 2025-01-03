@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:your_recipe/features/grocery/domain/entities/grocery_item_entity.dart';
 import 'package:your_recipe/features/grocery/domain/entities/grocery_item_response_entity.dart';
+import 'package:your_recipe/features/grocery/domain/usecase/mark_purchased_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/view_groceries_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/add_grocery_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/add_groceries_use_case.dart';
@@ -19,6 +20,7 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
   final DeleteAllGroceriesUsecase deleteAllUsecase;
   final DeleteGroceryUsecase deleteUsecase;
   final EditGroceryUsecase editUsecase;
+  final MarkPurchasedUsecase markPurchasedUsecase;
 
   GroceryBloc({
     required this.viewUsecase,
@@ -27,6 +29,7 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
     required this.deleteAllUsecase,
     required this.deleteUsecase,
     required this.editUsecase,
+    required this.markPurchasedUsecase
   }) : super(GroceryInitial()) {
     on<AllGroceriesViewed>(_onAllGroceriesViewed);
     on<GroceryAdded>(_onGroceryAdded);
@@ -34,6 +37,7 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
     on<AllGroceriesDeleted>(_onAllGroceriesDeleted);
     on<GroceryDeleted>(_onGroceryDeleted);
     on<GroceryEdited>(_onGroceryEdited);
+    on<GroceryPurchased>(_onGroceryPurchased);
   }
 
   Future<void> _onAllGroceriesViewed(AllGroceriesViewed event, Emitter<GroceryState> emit) async {
@@ -108,6 +112,18 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
       emit(ViewAllGroceriesSuccess(groceries));
     } catch (e) {
       emit(GroceryError("Editing grocery failed: ${e.toString()}"));
+    }
+  }
+
+  Future<void> _onGroceryPurchased(GroceryPurchased event, Emitter<GroceryState> emit) async {
+    emit(GroceryLoading());
+    try {
+      await markPurchasedUsecase(event.id);
+      emit(MarkPurchasedSuccess());
+      final groceries = await viewUsecase(null);
+      emit(ViewAllGroceriesSuccess(groceries));
+    } catch (e) {
+      emit(GroceryError("Mark as purchased grocery failed: ${e.toString()}"));
     }
   }
 }

@@ -10,6 +10,7 @@ abstract class GroceryRemoteDataSource {
   Future<List<GroceryItemResponse>> viewGroceries();
   Future<void> deleteGrocery(int id);
   Future<void> deleteAll();
+  Future<void> markPurchased(int id);
 }
 
 class GroceryRemoteDataSourceImpl implements GroceryRemoteDataSource {
@@ -141,9 +142,28 @@ class GroceryRemoteDataSourceImpl implements GroceryRemoteDataSource {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = response.data;
+      print('Fetched data: $data');
       return data.map((item) => GroceryItemResponse.fromJson(item)).toList();
     } else {
       throw Exception('Fetching groceries failed');
+    }
+  }
+
+  @override
+  Future<void> markPurchased(int id) async {
+    final accessToken = await _getAccessToken();
+
+    final response = await dio.post(
+      'https://ringtail-renewing-terminally.ngrok-free.app/chefmate/grocery/mark-purchased/$id/',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to mark grocery as purchased');
     }
   }
 }

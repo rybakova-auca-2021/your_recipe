@@ -21,6 +21,7 @@ import 'package:your_recipe/features/grocery/domain/usecase/add_grocery_usecase.
 import 'package:your_recipe/features/grocery/domain/usecase/delete_all_groceries_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/delete_grocery_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/edit_grocery_usecase.dart';
+import 'package:your_recipe/features/grocery/domain/usecase/mark_purchased_usecase.dart';
 import 'package:your_recipe/features/grocery/domain/usecase/view_groceries_usecase.dart';
 import 'package:your_recipe/features/grocery/presentation/bloc/grocery_bloc/grocery_bloc.dart';
 import 'package:your_recipe/features/ingredients/domain/usecase/add_ingredient_usecase.dart';
@@ -178,6 +179,7 @@ class _RecipeAppState extends State<RecipeApp> {
                   deleteAllUsecase: GetIt.I<DeleteAllGroceriesUsecase>(),
                   deleteUsecase: GetIt.I<DeleteGroceryUsecase>(),
                   editUsecase: GetIt.I<EditGroceryUsecase>(),
+                  markPurchasedUsecase: GetIt.I<MarkPurchasedUsecase>()
                 ),
               ),
               BlocProvider<IngredientBloc>(

@@ -30,6 +30,7 @@ class AddGrocerySuccess extends GroceryState {}
 class AddGroceriesSuccess extends GroceryState {}
 class DeleteGrocerySuccess extends GroceryState {}
 class DeleteAllGroceriesSuccess extends GroceryState {}
+class MarkPurchasedSuccess extends GroceryState {}
 class EditGrocerySuccess extends GroceryState {
   final GroceryItemEntity groceryItem;
 

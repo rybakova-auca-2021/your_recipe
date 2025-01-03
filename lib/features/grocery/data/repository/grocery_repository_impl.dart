@@ -22,6 +22,7 @@ class GroceryRepositoryImpl implements GroceryRepository {
       user: response.user,
       name: response.name,
       quantity: response.quantity,
+      purchased: response.purchased
     );
   }
 
@@ -39,6 +40,7 @@ class GroceryRepositoryImpl implements GroceryRepository {
       user: response.user,
       name: response.name,
       quantity: response.quantity,
+      purchased: response.purchased
     )).toList();
   }
 
@@ -64,7 +66,8 @@ class GroceryRepositoryImpl implements GroceryRepository {
       id: response.id,
       name: response.name,
       quantity: response.quantity,
-      user: response.user
+      user: response.user,
+      purchased: response.purchased
     );
   }
 
@@ -77,7 +80,13 @@ class GroceryRepositoryImpl implements GroceryRepository {
         name: response.name,
         quantity: response.quantity,
         user: response.user,
+        purchased: response.purchased
       );
     }).toList();
+  }
+
+  @override
+  Future<void> markPurchased(int id) async {
+    await remoteDataSource.markPurchased(id);
   }
 }

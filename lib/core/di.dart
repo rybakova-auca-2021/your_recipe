@@ -9,6 +9,7 @@ import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:your_recipe/core/token_interceptor.dart';
 import 'package:your_recipe/features/auth/domain/usecases/firebase_auth_usecase.dart';
+import 'package:your_recipe/features/grocery/domain/usecase/mark_purchased_usecase.dart';
 import 'package:your_recipe/features/ingredients/presentation/bloc/ingredient_bloc/ingredient_bloc.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipe_of_the_day_use_case.dart';
 import 'package:your_recipe/features/main/domain/usecase/fetch_recipes_by_category_use_case.dart';
@@ -177,6 +178,7 @@ Future<void> initDI() async {
   GetIt.I.registerLazySingleton<DeleteGroceryUsecase>(() => DeleteGroceryUsecase(GetIt.I<GroceryRepository>()));
   GetIt.I.registerLazySingleton<DeleteAllGroceriesUsecase>(() => DeleteAllGroceriesUsecase(GetIt.I<GroceryRepository>()));
   GetIt.I.registerLazySingleton<AddGroceriesUseCase>(() => AddGroceriesUseCase(GetIt.I<GroceryRepository>()));
+  GetIt.I.registerLazySingleton<MarkPurchasedUsecase>(() => MarkPurchasedUsecase(GetIt.I<GroceryRepository>()));
 
   GetIt.I.registerLazySingleton<ViewIngredientsUseCase>(() => ViewIngredientsUseCase(GetIt.I<IngredientRepository>()));
   GetIt.I.registerLazySingleton<EditIngredientUseCase>(() => EditIngredientUseCase(GetIt.I<IngredientRepository>()));
